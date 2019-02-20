@@ -1,7 +1,7 @@
-# Perl 6 コンパイラのインストール
+# Perl 6 コンパイラのインストール (JVM)
 
 Windows Subsystem for Linux (WSL) に Perl 6 コンパイラの [Rakudo](https://rakudo.org/) をソースコードからコンパイルしてインストールする。
-今回は Rakudo のバックエンドに **Java Virtual Machine (JVM)** を選択した（*MoarVM ではない*）。
+今回は Rakudo のバックエンドに **Java Virtual Machine (JVM)** を選択した（[MoarVM を選択する場合はこちら](./install-for-moar.md)）。
 
 ## インストール方法
 
