@@ -24,20 +24,18 @@ Hello, Perl 6 World!
 
 ## 所感
 
-JVM の起動が遅い...。
+JVM だとめっちゃ遅いですね...。
+ちなみに、JVM の起動が遅いのではなく、ソースコードのパースに時間が掛かっているようでした。
 
 ```bash
-$ time perl6 -e ''
-
-real    0m9.235s
-user    0m18.531s
-sys     0m3.016s
-
-$ time perl6 -v
-This is Rakudo version 2018.12-311-gd656381 built on JVM
-implementing Perl 6.d.
-
-real    0m3.451s
-user    0m8.063s
-sys     0m1.328s
+$ perl6-j --stagestats -e ''
+Stage start      :   0.002
+Stage parse      :   6.021
+Stage syntaxcheck:   0.001
+Stage ast        :   0.001
+Stage optimize   :   0.071
+Stage jast       :   0.212
+Stage classfile  :   0.035
+Stage jar        :   0.000
+Stage jvm        :   0.013
 ```
