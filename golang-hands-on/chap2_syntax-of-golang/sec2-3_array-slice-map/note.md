@@ -189,18 +189,18 @@ append([]int{v}, s[0], s[1], ..., s[len(s)])
 
 ##### `insert`
 
-追加する値 `v` だけを持つスライスに、`s` の `i+1` 番目から末尾までの値を `append` したものを、
-スライス `s` の先頭から（0-indexed で）`i` 番目までのスライスに `append` すれば良い。
+追加する値 `v` だけを持つスライスに、`s` の `i` 番目から末尾までの値を `append` したものを、
+スライス `s` の先頭から（0-indexed で）`i-1` 番目までのスライスに `append` すれば良い。
 
 下記のようには**書けない**ようだ。
 `too many arguments to append` と言われてしまう。
 ```
-append(s[:i], v, s[i+1:]...)    // error!
+append(s[:i], v, s[i:]...)    // error!
 ```
 
 ##### `remove`
 
-`s[:i-1]` と `s[i+1:]` を `append` で結合すれば良い。
+`s[:i]` と `s[i+1:]` を `append` で結合すれば良い。
 
 ## マップ `map`
 

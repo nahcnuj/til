@@ -17,6 +17,12 @@ func main() {
 
 	a = shift(a)
 	fmt.Println(a)
+
+	a = insert(a, 6, 2)
+	fmt.Println(a)
+
+	a = remove(a, 1)
+	fmt.Println(a)
 }
 
 func push(s []int, v int) []int {
@@ -36,9 +42,9 @@ func shift(s []int) []int {
 }
 
 func insert(s []int, v int, i int) []int {
-	return append(s[:i], append([]int{v}, s[i+1:]...)...)
+	return append(s[:i], append([]int{v}, s[i:]...)...)
 }
 
 func remove(s []int, i int) []int {
-	return append(s[:i-1], s[i+1:]...)
+	return append(s[:i], s[i+1:]...)
 }
