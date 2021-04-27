@@ -1,0 +1,11 @@
+*** start ***
+hello!
+test
+日本語
+*** end ***
+*** start ***
+2回め
+*** end ***
+*** start ***
+Hi!
+*** end ***
