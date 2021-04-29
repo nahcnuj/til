@@ -51,7 +51,6 @@ func main() {
 		Account struct {
 			Display_name string
 			Acct         string
-			Url          string
 		}
 		Content string
 	}
