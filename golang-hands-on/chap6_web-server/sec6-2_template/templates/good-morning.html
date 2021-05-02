@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <title>Good morning, world!</title>
+</head>
+
+<body>
+  <h1>{{.Title}}</h1>
+  <p>{{.Message}}</p>
+
+  {{ with .Segments }}
+    <ul>
+      {{ range $i, $v := . }}
+        <li>{{$i}}: {{$v}}</li>
+      {{ else }}
+        <li>No segements</li>
+      {{ end }}
+    </ul>
+  {{ end }}
+
+  {{ with .Queries }}
+    <ul>
+      {{ range $k, $vs := . }}
+        <li>
+          {{ $k }}:
+          <ul>
+            {{ range $vs }}
+              <li>{{.}}</li>
+            {{ end }}
+          </ul>
+        </li>
+      {{ else }}
+        <li>No query strings</li>
+      {{ end }}
+    </ul>
+  {{ end }}
+</body>
+
+</html>
