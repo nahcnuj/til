@@ -33,3 +33,7 @@ type Triangle struct {
 	// 高さ
 	Height float64
 }
+
+func (t Triangle) Area() float64 {
+	return 0
+}
