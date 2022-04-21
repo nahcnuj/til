@@ -1,13 +1,13 @@
 package shapes
 
 type Rectangle struct {
-	w, h float64
+	W, H float64
 }
 
 func Perimeter(rectangle Rectangle) float64 {
-	return 2 * (rectangle.w + rectangle.h)
+	return 2 * (rectangle.W + rectangle.H)
 }
 
 func Area(rectangle Rectangle) float64 {
-	return rectangle.w * rectangle.h
+	return rectangle.W * rectangle.H
 }
