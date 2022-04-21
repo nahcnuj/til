@@ -16,6 +16,13 @@ func TestRepeat(t *testing.T) {
 
 		assertCorrectMessage(t, expected, repeated)
 	})
+
+	t.Run("repeat 'x' 10 times", func(t *testing.T) {
+		repeated := Repeat("x", 10)
+		expected := "xxxxxxxxxx"
+
+		assertCorrectMessage(t, expected, repeated)
+	})
 }
 
 func BenchmarkRepeat(b *testing.B) {
