@@ -1,8 +1,20 @@
 {
 	"folders": [
 		{
-			"path": "."
-		}
+			"path": "./hello"
+		},
+		{
+			"path": "./integers"
+		},
+		{
+			"path": "./iteration"
+		},
+		{
+			"path": "./summation"
+		},
+		{
+			"path": "./shapes"
+		},
 	],
 	"settings": {
 		"go.lintTool": "golangci-lint",
