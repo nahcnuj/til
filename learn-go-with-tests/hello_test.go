@@ -3,21 +3,23 @@ package main
 import "testing"
 
 func TestHello(t *testing.T) {
+	assertCorrectMessage := func(t testing.TB, got, want string) {
+		t.Helper() // tells the test suite that this assertion method is a helper
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	}
 	t.Run("saying hello to people", func(t *testing.T) {
 		got := Hello("Chris")
 		want := "Hello, Chris"
 
-		if got != want {
-			t.Errorf("got %q want %q", got, want)
-		}
+		assertCorrectMessage(t, got, want)
 	})
 
 	t.Run("say 'Hello, World' when an empty string is given", func(t *testing.T) {
 		got := Hello("")
 		want := "Hello, World"
 
-		if got != want {
-			t.Errorf("got %q want %q", got, want)
-		}
+		assertCorrectMessage(t, got, want)
 	})
 }
