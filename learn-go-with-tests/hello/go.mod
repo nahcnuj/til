@@ -1,3 +1,3 @@
-module github.com/nahcnuj/til/learn-go-with-tests
+module hello
 
 go 1.18
