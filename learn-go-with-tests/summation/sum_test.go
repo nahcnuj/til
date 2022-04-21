@@ -49,4 +49,11 @@ func TestSumAllTails(t *testing.T) {
 
 		checkSums(t, got, want)
 	})
+
+	t.Run("safely sum slices having single number", func(t *testing.T) {
+		got := SumAllTails([]int{7}, []int{1, 2, 3, 4, 5})
+		want := []int{0, 14}
+
+		checkSums(t, got, want)
+	})
 }
