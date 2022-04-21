@@ -15,6 +15,9 @@
 		{
 			"path": "./shapes"
 		},
+		{
+			"path": "./wallets"
+		},
 	],
 	"settings": {
 		"go.lintTool": "golangci-lint",
