@@ -12,5 +12,5 @@ func Hello(name string, lang string) string {
 }
 
 func main() {
-	fmt.Println(Hello("world"))
+	fmt.Println(Hello("world", "English"))
 }
