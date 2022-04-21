@@ -11,3 +11,7 @@ func Perimeter(rectangle Rectangle) float64 {
 func Area(rectangle Rectangle) float64 {
 	return rectangle.W * rectangle.H
 }
+
+type Circle struct {
+	Radius float64
+}
