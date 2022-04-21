@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"go.lintTool": "golangci-lint",
+		"go.lintFlags": [
+			"--fast"
+		],
+		"editor.formatOnSave": true,
+	},
+	"extensions": {
+		"recommendations": [
+			"golang.go"
+		]
+	}
+}
