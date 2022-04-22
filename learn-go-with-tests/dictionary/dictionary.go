@@ -39,6 +39,14 @@ func (d Dictionary) Add(key, value string) error {
 }
 
 func (d Dictionary) Update(key, value string) error {
-	d[key] = value
+	_, err := d.Search(key)
+	switch err {
+	case nil:
+		d[key] = value
+	case ErrNotFound:
+		return ErrWordDoesNotExist
+	default:
+		return err
+	}
 	return nil
 }
