@@ -18,6 +18,9 @@
 		{
 			"path": "./wallets"
 		},
+		{
+			"path": "./dictionary"
+		},
 	],
 	"settings": {
 		"go.lintTool": "golangci-lint",
