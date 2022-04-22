@@ -21,7 +21,9 @@ type ConfigurableSleeper struct {
 	sleep    func(time.Duration)
 }
 
-func (s *ConfigurableSleeper) Sleep() {}
+func (s *ConfigurableSleeper) Sleep() {
+	s.sleep(s.duration)
+}
 
 const finalWord = "Go!"
 const countdownStart = 3
