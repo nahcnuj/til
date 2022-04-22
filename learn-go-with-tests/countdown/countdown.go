@@ -17,12 +17,12 @@ func (s *DefaultSleeper) Sleep() {
 }
 
 type ConfigurableSleeper struct {
-	duration time.Duration
-	sleep    func(time.Duration)
+	Duration  time.Duration
+	SleepImpl func(time.Duration)
 }
 
 func (s *ConfigurableSleeper) Sleep() {
-	s.sleep(s.duration)
+	s.SleepImpl(s.Duration)
 }
 
 const finalWord = "Go!"
