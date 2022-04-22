@@ -20,13 +20,14 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	//var dict Dictionary // a map can be nil, which its use causes a runtime error
-	dict := Dictionary{} // or make(Dictionary) is ok
-	key := "test"
-	value := "this is just a test"
+	t.Run("new word", func(t *testing.T) {
+		dict := Dictionary{}
+		key := "test"
+		value := "this is just a test"
 
-	dict.Add(key, value)
-	assertDefinition(t, dict, key, value)
+		dict.Add(key, value)
+		assertDefinition(t, dict, key, value)
+	})
 }
 
 func assertDefinition(t testing.TB, dict Dictionary, key, want string) {
