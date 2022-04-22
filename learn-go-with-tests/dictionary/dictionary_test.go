@@ -20,7 +20,8 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	dict := Dictionary{}
+	//var dict Dictionary // a map can be nil, which its use causes a runtime error
+	dict := Dictionary{} // or make(Dictionary) is ok
 	dict.Add("test", "this is just a test")
 
 	want := "this is just a test"
