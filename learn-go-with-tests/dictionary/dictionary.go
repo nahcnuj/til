@@ -7,8 +7,9 @@ func (e DictionaryErr) Error() string {
 }
 
 const (
-	ErrNotFound   = DictionaryErr("could not find the word you were looking for")
-	ErrWordExists = DictionaryErr("cannot add the word because it already exists")
+	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
+	ErrWordExists       = DictionaryErr("cannot add the word because it already exists")
+	ErrWordDoesNotExist = DictionaryErr("cannot update the word because it does not exist")
 )
 
 type Dictionary map[string]string
@@ -37,6 +38,7 @@ func (d Dictionary) Add(key, value string) error {
 	return nil
 }
 
-func (d Dictionary) Update(key, value string) {
+func (d Dictionary) Update(key, value string) error {
 	d[key] = value
+	return nil
 }
