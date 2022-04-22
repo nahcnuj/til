@@ -19,12 +19,18 @@ func TestSearch(t *testing.T) {
 			t.Fatal("expected to get an error")
 		}
 
-		want := "could not find the word you were looking for"
-		assertStrings(t, err.Error(), want)
+		assertError(t, err, ErrNotFound)
 	})
 }
 
 func assertStrings(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
+func assertError(t testing.TB, got, want error) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
