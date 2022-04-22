@@ -5,11 +5,12 @@ import "testing"
 func TestSearch(t *testing.T) {
 	dict := Dictionary{"test": "This is just a test."}
 
-	key := "test"
-	got := dict.Search(key)
-	want := "This is just a test."
+	t.Run("known word", func(t *testing.T) {
+		got := dict.Search("test")
+		want := "This is just a test."
 
-	assertStrings(t, got, want)
+		assertStrings(t, got, want)
+	})
 }
 
 func assertStrings(t testing.TB, got, want string) {
