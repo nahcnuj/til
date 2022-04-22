@@ -10,6 +10,12 @@ type Sleeper interface {
 	Sleep()
 }
 
+type DefaultSleeper struct{}
+
+func (s *DefaultSleeper) Sleep() {
+	time.Sleep(1 * time.Second)
+}
+
 const finalWord = "Go!"
 const countdownStart = 3
 
