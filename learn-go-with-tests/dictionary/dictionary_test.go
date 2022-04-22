@@ -22,10 +22,17 @@ func TestSearch(t *testing.T) {
 func TestAdd(t *testing.T) {
 	//var dict Dictionary // a map can be nil, which its use causes a runtime error
 	dict := Dictionary{} // or make(Dictionary) is ok
-	dict.Add("test", "this is just a test")
+	key := "test"
+	value := "this is just a test"
 
-	want := "this is just a test"
-	got, err := dict.Search("test")
+	dict.Add(key, value)
+	assertDefinition(t, dict, key, value)
+}
+
+func assertDefinition(t testing.TB, dict Dictionary, key, want string) {
+	t.Helper()
+
+	got, err := dict.Search(key)
 	if err != nil {
 		t.Fatal("should find added word: ", err)
 	}
