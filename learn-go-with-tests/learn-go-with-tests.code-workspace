@@ -21,6 +21,9 @@
 		{
 			"path": "./dictionary"
 		},
+		{
+			"path": "di"
+		}
 	],
 	"settings": {
 		"go.lintTool": "golangci-lint",

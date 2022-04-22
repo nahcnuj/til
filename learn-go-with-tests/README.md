@@ -9,3 +9,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 5. Structs, methods & interfaces: [shapes](./shapes/)
 6. Pointers & errors: [wallets](./wallets/)
 7. Maps: [dictionary](./dictionary/)
+8. Dependecy injection: [di](./di/)
