@@ -1,31 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "./hello"
-		},
-		{
-			"path": "./integers"
-		},
-		{
-			"path": "./iteration"
-		},
-		{
-			"path": "./summation"
-		},
-		{
-			"path": "./shapes"
-		},
-		{
-			"path": "./wallets"
-		},
-		{
-			"path": "./dictionary"
-		},
-		{
-			"path": "di"
-		},
-		{
-			"path": "countdown"
+			"path": "."
 		}
 	],
 	"settings": {
