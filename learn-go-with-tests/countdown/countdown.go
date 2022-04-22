@@ -1,3 +1,5 @@
 package countdown
 
-func Countdown() {}
+import "bytes"
+
+func Countdown(out *bytes.Buffer) {}
