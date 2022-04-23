@@ -20,8 +20,11 @@ func walk(x interface{}, fn func(input string)) {
 		for _, key := range val.MapKeys() {
 			walkValue(val.MapIndex(key), fn)
 		}
+	case reflect.Chan:
+		for v, ok := val.Recv(); ok; v, ok = val.Recv() { // while does not exists in Go
+			walkValue(v, fn)
+		}
 	}
-
 }
 
 func walkValue(val reflect.Value, fn func(input string)) {
