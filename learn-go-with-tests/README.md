@@ -14,3 +14,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 10. Concurrency: [concurrency](./concurrency/)
 11. Select: [racer](./racer/)
 12. Reflection: [erflection](./reflection/)
+13. Sync: [sync](./sync/)
