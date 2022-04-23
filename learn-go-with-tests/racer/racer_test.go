@@ -19,7 +19,7 @@ func TestRacer(t *testing.T) {
 		fastURL := fastServer.URL
 
 		want := fastURL
-		got := Racer(slowURL, fastURL)
+		got, _ := Racer(slowURL, fastURL)
 
 		if got != want {
 			t.Errorf("got %q, want %q", got, want)
