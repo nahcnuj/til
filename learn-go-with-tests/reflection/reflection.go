@@ -1,3 +1,5 @@
 package reflection
 
-func walk(x interface{}, fn func(input string)) {}
+func walk(x interface{}, fn func(input string)) {
+	fn("called")
+}
