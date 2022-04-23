@@ -1,9 +1,13 @@
 package synchronous
 
-type Counter struct{}
+type Counter struct {
+	value int
+}
 
-func (c *Counter) Inc() {}
+func (c *Counter) Inc() {
+	c.value++
+}
 
 func (c *Counter) Value() int {
-	return 0
+	return c.value
 }
