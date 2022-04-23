@@ -24,6 +24,11 @@ func walk(x interface{}, fn func(input string)) {
 		for v, ok := val.Recv(); ok; v, ok = val.Recv() { // while does not exists in Go
 			walkValue(v, fn)
 		}
+	case reflect.Func:
+		valFnResult := val.Call(nil)
+		for _, res := range valFnResult {
+			walkValue(res, fn)
+		}
 	}
 }
 
