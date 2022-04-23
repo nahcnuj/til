@@ -5,12 +5,12 @@ import (
 	"time"
 )
 
-func Racer(a, b string) (winner string) {
+func Racer(a, b string) (winner string, err error) {
 	select {
 	case <-ping(a):
-		return a
+		return a, nil
 	case <-ping(b):
-		return b
+		return b, nil
 	}
 }
 
