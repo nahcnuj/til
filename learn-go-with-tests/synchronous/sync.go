@@ -3,7 +3,7 @@ package synchronous
 import "sync"
 
 type Counter struct {
-	mu    sync.Mutex
+	mu    sync.Mutex // can be embedded, but which confuses because Lock & Unlock get callable pubilcly
 	value int
 }
 
