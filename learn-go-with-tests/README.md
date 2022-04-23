@@ -13,5 +13,5 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 9. Mocking: [countdown](./countdown/)
 10. Concurrency: [concurrency](./concurrency/)
 11. Select: [racer](./racer/)
-12. Reflection: [erflection](./reflection/)
+12. Reflection: [flection](./reflection/)
 13. Sync: [sync](./sync/)
