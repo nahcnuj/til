@@ -33,6 +33,9 @@
 		{
 			"path": "concurrency"
 		},
+		{
+			"path": "racer"
+		}
 	],
 	"settings": {
 		"go.lintTool": "golangci-lint",

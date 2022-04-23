@@ -12,3 +12,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 8. Dependecy injection: [di](./di/)
 9. Mocking: [countdown](./countdown/)
 10. Concurrency: [concurrency](./concurrency/)
+11. Select: [racer](./racer/)
