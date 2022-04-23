@@ -4,19 +4,26 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
-type StubStore struct {
-	response string
+type SpyStore struct {
+	response  string
+	cancelled bool
 }
 
-func (s StubStore) Fetch() string {
+func (s *SpyStore) Fetch() string {
+	time.Sleep(100 * time.Millisecond)
 	return s.response
+}
+
+func (s *SpyStore) Cancel() {
+	s.cancelled = true
 }
 
 func TestServer(t *testing.T) {
 	data := "Hello, world"
-	svr := Server(&StubStore{data})
+	svr := Server(&SpyStore{response: data})
 
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 	response := httptest.NewRecorder()
