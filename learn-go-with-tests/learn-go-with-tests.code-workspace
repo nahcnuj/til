@@ -47,6 +47,9 @@
 		},
 		{
 			"path": "blogposts"
+		},
+		{
+			"path": "blogrenderer"
 		}
 	],
 	"settings": {
