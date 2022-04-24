@@ -1,6 +1,9 @@
 package numeral
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 type RomanNumeral struct {
 	Value  uint16
@@ -64,21 +67,28 @@ func isSubtractive(symbol byte) bool {
 	return symbol == 'I' || symbol == 'X' || symbol == 'C'
 }
 
-func ConvertToRoman(arabic uint16) string {
+func strToUint16(s string) uint16 {
+	n, _ := strconv.ParseUint(s, 10, 16)
+	return uint16(n)
+}
+
+func ConvertToRoman(arabic string) string {
+	number := strToUint16(arabic)
+
 	var result strings.Builder
 	for _, numeral := range allRomanNumerals {
-		for arabic >= numeral.Value {
+		for number >= numeral.Value {
 			result.WriteString(numeral.Symbol)
-			arabic -= numeral.Value
+			number -= numeral.Value
 		}
 	}
 	return result.String()
 }
 
-func ConvertToArabic(roman string) uint16 {
+func ConvertToArabic(roman string) string {
 	total := uint16(0)
 	for _, symbol := range romanNumeralString(roman).Symbols() {
 		total += allRomanNumerals.ValueOf(symbol...)
 	}
-	return total
+	return strconv.FormatUint(uint64(total), 10)
 }
