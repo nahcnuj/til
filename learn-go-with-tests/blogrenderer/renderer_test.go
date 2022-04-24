@@ -5,7 +5,6 @@ import (
 	"blogrenderer"
 	"bytes"
 	"io"
-	"strings"
 	"testing"
 
 	approvals "github.com/approvals/go-approval-tests"
@@ -56,18 +55,7 @@ Rendered successfully!`}
 			t.Fatal(err)
 		}
 
-		got := buf.String()
-
-		wants := []string{`Heading`, `Rendered successfully!`}
-		for _, want := range wants {
-			if !strings.Contains(got, want) {
-				t.Errorf("expected to contain %q", want)
-			}
-		}
-
-		if strings.Contains(got, `# Heading`) {
-			t.Errorf("expected that headings in the body are converted in HTML")
-		}
+		approvals.VerifyString(t, buf.String())
 	})
 }
 

@@ -2,9 +2,12 @@ package blogrenderer
 
 import (
 	"blogposts"
+	"bytes"
 	"embed"
 	"html/template"
 	"io"
+
+	"github.com/yuin/goldmark"
 )
 
 //go:embed "templates/*"
@@ -36,9 +39,30 @@ func NewPostRenderer() (*PostRenderer, error) {
 }
 
 func (r *PostRenderer) Render(w io.Writer, post blogposts.Post) error {
-	return r.tmpl.ExecuteTemplate(w, "post.gohtml", post)
+	vm, err := newPostVM(post)
+	if err != nil {
+		return err
+	}
+	return r.tmpl.ExecuteTemplate(w, "post.gohtml", vm)
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []blogposts.Post) error {
 	return r.tmpl.ExecuteTemplate(w, "index.gohtml", posts)
+}
+
+type postViewModel struct {
+	blogposts.Post
+	HTMLBody string
+}
+
+func newPostVM(post blogposts.Post) (postViewModel, error) {
+	buf := bytes.Buffer{}
+	err := goldmark.Convert([]byte(post.Body), &buf)
+	if err != nil {
+		return postViewModel{}, err
+	}
+
+	vm := postViewModel{Post: post}
+	vm.HTMLBody = buf.String()
+	return vm, nil
 }
