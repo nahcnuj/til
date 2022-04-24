@@ -16,6 +16,7 @@ type Post struct {
 const (
 	titlePrefix       = "Title: "
 	descriptionPrefix = "Description: "
+	tagsPrefix        = "Tags: "
 )
 
 func FromFS(fsys fs.FS) ([]Post, error) {
@@ -55,10 +56,13 @@ func newPost(postFile io.Reader) (Post, error) {
 
 	title := readMetaLine(titlePrefix)
 	description := readMetaLine(descriptionPrefix)
+	tagsLine := readMetaLine(tagsPrefix)
+	tags := strings.Split(tagsLine, ", ")
 
 	post := Post{
 		Title:       title,
 		Description: description,
+		Tags:        tags,
 	}
 	return post, nil
 }
