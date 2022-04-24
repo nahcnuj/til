@@ -35,13 +35,23 @@ func (r RomanNumerals) ValueOf(symbols ...byte) int {
 	return 0
 }
 
+func (r RomanNumerals) Exists(symbols ...byte) bool {
+	symbol := string(symbols)
+	for _, s := range r {
+		if s.Symbol == symbol {
+			return true
+		}
+	}
+	return false
+}
+
 type RomanNumeralString string
 
 func (s RomanNumeralString) Symbols() (symbols [][]byte) {
 	for i := 0; i < len(s); i++ {
 		symbol := s[i]
 		if couldBeSubtractive(i, symbol, string(s)) {
-			if value := allRomanNumerals.ValueOf(symbol, s[i+1]); value != 0 {
+			if allRomanNumerals.Exists(symbol, s[i+1]) {
 				symbols = append(symbols, []byte{symbol, s[i+1]})
 				i++
 			} else {
