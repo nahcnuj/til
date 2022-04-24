@@ -11,6 +11,11 @@ type Post struct {
 	Description string
 }
 
+const (
+	titlePrefix       = "Title: "
+	descriptionPrefix = "Description: "
+)
+
 func FromFS(fsys fs.FS) ([]Post, error) {
 	dir, err := fs.ReadDir(fsys, ".")
 	if err != nil {
@@ -46,8 +51,8 @@ func newPost(postFile io.Reader) (Post, error) {
 		return scanner.Text()
 	}
 
-	title := readLine()[7:]
-	description := readLine()[13:]
+	title := readLine()[len(titlePrefix):]
+	description := readLine()[len(descriptionPrefix):]
 
 	post := Post{
 		Title:       title,
