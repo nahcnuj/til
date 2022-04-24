@@ -43,8 +43,13 @@ func BenchmarkRender(b *testing.B) {
 		Body:        "This is a blog post.",
 	}
 
+	postRenderer, err := blogrenderer.NewPostRenderer()
+	if err != nil {
+		b.Fatal(err)
+	}
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		blogrenderer.Render(io.Discard, aPost)
+		postRenderer.Render(io.Discard, aPost)
 	}
 }
