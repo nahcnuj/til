@@ -41,3 +41,7 @@ func (r *PostRenderer) Render(w io.Writer, post blogposts.Post) error {
 	}
 	return nil
 }
+
+func (r *PostRenderer) RenderIndex(w io.Writer, posts []blogposts.Post) error {
+	return nil
+}
