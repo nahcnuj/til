@@ -17,3 +17,5 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 13. Sync: [sync](./sync/)
 14. Context: [contexts](./contexts/)
 15. Intro to property based tests: [numeral](./numeral/)
+16. Math: (skip)
+17. Reading files: [blogposts](./blogposts/)

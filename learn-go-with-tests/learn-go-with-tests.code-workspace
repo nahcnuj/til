@@ -44,6 +44,9 @@
 		},
 		{
 			"path": "numeral"
+		},
+		{
+			"path": "blogposts"
 		}
 	],
 	"settings": {
