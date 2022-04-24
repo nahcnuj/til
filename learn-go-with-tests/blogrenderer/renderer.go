@@ -22,3 +22,22 @@ func Render(w io.Writer, post blogposts.Post) error {
 
 	return nil
 }
+
+type PostRenderer struct {
+	tmpl *template.Template
+}
+
+func NewPostRenderer() (*PostRenderer, error) {
+	tmpl, err := template.ParseFS(blogTemplates, "templates/*.gohtml")
+	if err != nil {
+		return nil, err
+	}
+	return &PostRenderer{tmpl}, nil
+}
+
+func (r *PostRenderer) Render(w io.Writer, post blogposts.Post) error {
+	if err := r.tmpl.ExecuteTemplate(w, "post.gohtml", post); err != nil {
+		return err
+	}
+	return nil
+}
