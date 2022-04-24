@@ -12,9 +12,15 @@ import (
 
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("create posts from FS", func(t *testing.T) {
+		const (
+			firstBody = `Title: Post 1
+Description: Description 1`
+			secondBody = `Title: テスト投稿2
+Description: ポストの概要`
+		)
 		fs := fstest.MapFS{
-			"hello world.md":  {Data: []byte("Title: Post 1")},
-			"hello-world2.md": {Data: []byte("Title: テスト投稿2")},
+			"hello world.md":  {Data: []byte(firstBody)},
+			"hello-world2.md": {Data: []byte(secondBody)},
 		}
 
 		posts, err := blogposts.FromFS(fs)
@@ -28,7 +34,10 @@ func TestNewBlogPosts(t *testing.T) {
 		}
 
 		got := posts[0]
-		want := blogposts.Post{Title: "Post 1"}
+		want := blogposts.Post{
+			Title:       "Post 1",
+			Description: "Description 1",
+		}
 
 		assertPost(t, got, want)
 	})
