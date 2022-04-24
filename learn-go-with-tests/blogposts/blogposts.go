@@ -6,7 +6,8 @@ import (
 )
 
 type Post struct {
-	Title string
+	Title       string
+	Description string
 }
 
 func FromFS(fsys fs.FS) ([]Post, error) {
