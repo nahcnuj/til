@@ -8,6 +8,7 @@ type RomanNumeral struct {
 }
 
 var breakpoints = []RomanNumeral{
+	{50, "L"},
 	{40, "XL"},
 	{10, "X"},
 	{9, "IX"},
