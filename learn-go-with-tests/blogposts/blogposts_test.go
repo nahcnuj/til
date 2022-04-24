@@ -14,9 +14,11 @@ func TestNewBlogPosts(t *testing.T) {
 	t.Run("create posts from FS", func(t *testing.T) {
 		const (
 			firstBody = `Title: Post 1
-Description: Description 1`
+Description: Description 1
+Tags: TDD, go`
 			secondBody = `Title: テスト投稿2
-Description: ポストの概要`
+Description: ポストの概要
+Tags: Perl, 正規表現`
 		)
 		fs := fstest.MapFS{
 			"hello world.md":  {Data: []byte(firstBody)},
@@ -37,6 +39,7 @@ Description: ポストの概要`
 		want := blogposts.Post{
 			Title:       "Post 1",
 			Description: "Description 1",
+			Tags:        []string{"TDD", "go"},
 		}
 
 		assertPost(t, got, want)
