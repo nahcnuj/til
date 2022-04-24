@@ -82,3 +82,7 @@ func readBody(scanner *bufio.Scanner) string {
 	}
 	return strings.TrimSuffix(buf.String(), "\n")
 }
+
+func (p Post) SanitizedTitleForUrl() string {
+	return strings.ToLower(strings.ReplaceAll(p.Title, " ", "-"))
+}
