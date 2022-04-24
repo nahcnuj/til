@@ -2,12 +2,13 @@ package numeral
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 	"testing/quick"
 )
 
 var cases = []struct {
-	Arabic uint16
+	Number uint16
 	Roman  string
 }{
 	{1, "I"},
@@ -42,10 +43,14 @@ var cases = []struct {
 	{798, "DCCXCVIII"},
 }
 
+func uint16ToStr(u uint16) string {
+	return strconv.FormatUint(uint64(u), 10)
+}
+
 func TestRomanNumerals(t *testing.T) {
 	for _, test := range cases {
-		t.Run(fmt.Sprintf("%d gets converted to %q", test.Arabic, test.Roman), func(t *testing.T) {
-			got := ConvertToRoman(test.Arabic)
+		t.Run(fmt.Sprintf("%q gets converted to %q", uint16ToStr(test.Number), test.Roman), func(t *testing.T) {
+			got := ConvertToRoman(test.Number)
 			if got != test.Roman {
 				t.Errorf("got %q, want %q", got, test.Roman)
 			}
@@ -55,10 +60,11 @@ func TestRomanNumerals(t *testing.T) {
 
 func TestConvertingToArabic(t *testing.T) {
 	for _, test := range cases {
-		t.Run(fmt.Sprintf("%q gets converted to %d", test.Roman, test.Arabic), func(t *testing.T) {
+		want := uint16ToStr(test.Number)
+		t.Run(fmt.Sprintf("%q gets converted to %q", test.Roman, want), func(t *testing.T) {
 			got := ConvertToArabic(test.Roman)
-			if got != test.Arabic {
-				t.Errorf("got %d, want %d", got, test.Arabic)
+			if got != test.Number {
+				t.Errorf("got %q, want %q", got, want)
 			}
 		})
 	}
