@@ -35,6 +35,25 @@ func (r RomanNumerals) ValueOf(symbols ...byte) int {
 	return 0
 }
 
+type RomanNumeralString string
+
+func (s RomanNumeralString) Symbols() (symbols [][]byte) {
+	for i := 0; i < len(s); i++ {
+		symbol := s[i]
+		if couldBeSubtractive(i, symbol, string(s)) {
+			if value := allRomanNumerals.ValueOf(symbol, s[i+1]); value != 0 {
+				symbols = append(symbols, []byte{symbol, s[i+1]})
+				i++
+			} else {
+				symbols = append(symbols, []byte{symbol})
+			}
+		} else {
+			symbols = append(symbols, []byte{symbol})
+		}
+	}
+	return
+}
+
 func ConvertToRoman(arabic int) string {
 	var result strings.Builder
 	for _, numeral := range allRomanNumerals {
@@ -48,20 +67,8 @@ func ConvertToRoman(arabic int) string {
 
 func ConvertToArabic(roman string) int {
 	total := 0
-	for i := 0; i < len(roman); i++ {
-		symbol := roman[i]
-
-		// take care of the cases like "IV"
-		if couldBeSubtractive(i, symbol, roman) {
-			if value := allRomanNumerals.ValueOf(symbol, roman[i+1]); value != 0 {
-				total += value
-				i++ // skip the next character because it have been processed
-			} else { // e.g. "II"
-				total += allRomanNumerals.ValueOf(symbol)
-			}
-		} else { // "I", "V"
-			total += allRomanNumerals.ValueOf(symbol)
-		}
+	for _, symbol := range RomanNumeralString(roman).Symbols() {
+		total += allRomanNumerals.ValueOf(symbol...)
 	}
 	return total
 }
