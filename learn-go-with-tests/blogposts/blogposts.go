@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"io/fs"
+	"strings"
 )
 
 type Post struct {
@@ -46,13 +47,13 @@ func getPostFromFile(fsys fs.FS, f fs.DirEntry) (Post, error) {
 func newPost(postFile io.Reader) (Post, error) {
 	scanner := bufio.NewScanner(postFile)
 
-	readLine := func() string {
+	readMetaLine := func(tagName string) string {
 		scanner.Scan()
-		return scanner.Text()
+		return strings.TrimPrefix(scanner.Text(), tagName)
 	}
 
-	title := readLine()[len(titlePrefix):]
-	description := readLine()[len(descriptionPrefix):]
+	title := readMetaLine(titlePrefix)
+	description := readMetaLine(descriptionPrefix)
 
 	post := Post{
 		Title:       title,
