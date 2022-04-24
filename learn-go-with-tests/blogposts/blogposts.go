@@ -8,7 +8,11 @@ type Post struct {
 }
 
 func FromFS(fsys fs.FS) ([]Post, error) {
-	dir, _ := fs.ReadDir(fsys, ".")
+	dir, err := fs.ReadDir(fsys, ".")
+	if err != nil {
+		return nil, err
+	}
+
 	var posts []Post
 	for range dir {
 		posts = append(posts, Post{})
