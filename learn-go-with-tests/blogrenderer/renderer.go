@@ -52,7 +52,7 @@ func (r *PostRenderer) RenderIndex(w io.Writer, posts []blogposts.Post) error {
 
 type postViewModel struct {
 	blogposts.Post
-	HTMLBody string
+	HTMLBody template.HTML
 }
 
 func newPostVM(post blogposts.Post) (postViewModel, error) {
@@ -63,6 +63,6 @@ func newPostVM(post blogposts.Post) (postViewModel, error) {
 	}
 
 	vm := postViewModel{Post: post}
-	vm.HTMLBody = buf.String()
+	vm.HTMLBody = template.HTML(buf.String())
 	return vm, nil
 }
