@@ -16,7 +16,7 @@ func Render(w io.Writer, post blogposts.Post) error {
 		return err
 	}
 
-	if err := tmpl.Execute(w, post); err != nil {
+	if err := tmpl.ExecuteTemplate(w, "post.gohtml", post); err != nil {
 		return err
 	}
 
