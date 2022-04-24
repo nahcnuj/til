@@ -7,12 +7,12 @@ import (
 )
 
 func Render(w io.Writer, post blogposts.Post) error {
-	_, err := fmt.Fprintf(w, "<h1>%s</h1>\n", post.Title)
+	_, err := fmt.Fprintf(w, "<h1>%s</h1>", post.Title)
 	if err != nil {
 		return err
 	}
 
-	_, err = fmt.Fprintf(w, "<p>%s</p>\n", post.Description)
+	_, err = fmt.Fprintf(w, "<p>%s</p>", post.Description)
 	if err != nil {
 		return err
 	}
