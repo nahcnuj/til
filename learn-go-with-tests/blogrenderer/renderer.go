@@ -27,7 +27,8 @@ func Render(w io.Writer, post blogposts.Post) error {
 }
 
 type PostRenderer struct {
-	tmpl *template.Template
+	tmpl     *template.Template
+	mdParser goldmark.Markdown
 }
 
 func NewPostRenderer() (*PostRenderer, error) {
@@ -35,11 +36,12 @@ func NewPostRenderer() (*PostRenderer, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &PostRenderer{tmpl}, nil
+	mdParser := goldmark.New()
+	return &PostRenderer{tmpl: tmpl, mdParser: mdParser}, nil
 }
 
 func (r *PostRenderer) Render(w io.Writer, post blogposts.Post) error {
-	vm, err := newPostVM(post)
+	vm, err := newPostVM(post, r)
 	if err != nil {
 		return err
 	}
@@ -55,9 +57,9 @@ type postViewModel struct {
 	HTMLBody template.HTML
 }
 
-func newPostVM(post blogposts.Post) (postViewModel, error) {
+func newPostVM(post blogposts.Post, renderer *PostRenderer) (postViewModel, error) {
 	buf := bytes.Buffer{}
-	err := goldmark.Convert([]byte(post.Body), &buf)
+	err := renderer.mdParser.Convert([]byte(post.Body), &buf)
 	if err != nil {
 		return postViewModel{}, err
 	}
