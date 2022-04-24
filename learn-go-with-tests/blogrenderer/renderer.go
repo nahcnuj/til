@@ -36,15 +36,9 @@ func NewPostRenderer() (*PostRenderer, error) {
 }
 
 func (r *PostRenderer) Render(w io.Writer, post blogposts.Post) error {
-	if err := r.tmpl.ExecuteTemplate(w, "post.gohtml", post); err != nil {
-		return err
-	}
-	return nil
+	return r.tmpl.ExecuteTemplate(w, "post.gohtml", post)
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []blogposts.Post) error {
-	if err := r.tmpl.ExecuteTemplate(w, "index.gohtml", posts); err != nil {
-		return err
-	}
-	return nil
+	return r.tmpl.ExecuteTemplate(w, "index.gohtml", posts)
 }
