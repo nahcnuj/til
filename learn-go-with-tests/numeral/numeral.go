@@ -50,18 +50,18 @@ type RomanNumeralString string
 func (s RomanNumeralString) Symbols() (symbols [][]byte) {
 	for i := 0; i < len(s); i++ {
 		symbol := s[i]
-		if couldBeSubtractive(i, symbol, string(s)) {
-			if allRomanNumerals.Exists(symbol, s[i+1]) {
-				symbols = append(symbols, []byte{symbol, s[i+1]})
-				i++
-			} else {
-				symbols = append(symbols, []byte{symbol})
-			}
+		if i+1 < len(s) && isSubtractive(symbol) && allRomanNumerals.Exists(symbol, s[i+1]) {
+			symbols = append(symbols, []byte{symbol, s[i+1]})
+			i++
 		} else {
 			symbols = append(symbols, []byte{symbol})
 		}
 	}
 	return
+}
+
+func isSubtractive(symbol byte) bool {
+	return symbol == 'I' || symbol == 'X' || symbol == 'C'
 }
 
 func ConvertToRoman(arabic int) string {
@@ -81,12 +81,4 @@ func ConvertToArabic(roman string) int {
 		total += allRomanNumerals.ValueOf(symbol...)
 	}
 	return total
-}
-
-func isSubtractive(symbol byte) bool {
-	return symbol == 'I' || symbol == 'X' || symbol == 'C'
-}
-
-func couldBeSubtractive(index int, currentSymbol byte, roman string) bool {
-	return index+1 < len(roman) && isSubtractive(currentSymbol)
 }
