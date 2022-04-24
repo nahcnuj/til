@@ -1,6 +1,7 @@
 package blogrenderer_test
 
 import (
+	"blogrenderer"
 	"blogposts"
 	"bytes"
 	"testing"
