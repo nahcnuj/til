@@ -49,8 +49,9 @@ func uint16ToStr(u uint16) string {
 
 func TestRomanNumerals(t *testing.T) {
 	for _, test := range cases {
+		arabic := uint16ToStr(test.Number)
 		t.Run(fmt.Sprintf("%q gets converted to %q", uint16ToStr(test.Number), test.Roman), func(t *testing.T) {
-			got := ConvertToRoman(test.Number)
+			got := ConvertToRoman(arabic)
 			if got != test.Roman {
 				t.Errorf("got %q, want %q", got, test.Roman)
 			}
@@ -63,7 +64,7 @@ func TestConvertingToArabic(t *testing.T) {
 		want := uint16ToStr(test.Number)
 		t.Run(fmt.Sprintf("%q gets converted to %q", test.Roman, want), func(t *testing.T) {
 			got := ConvertToArabic(test.Roman)
-			if got != test.Number {
+			if got != want {
 				t.Errorf("got %q, want %q", got, want)
 			}
 		})
@@ -71,10 +72,11 @@ func TestConvertingToArabic(t *testing.T) {
 }
 
 func TestPropertiesOfConversion(t *testing.T) {
-	assertion := func(arabic uint16) bool {
-		if arabic > 3999 {
+	assertion := func(number uint16) bool {
+		if number > 3999 {
 			return true
 		}
+		arabic := uint16ToStr(number)
 		t.Log("testing", arabic)
 		roman := ConvertToRoman(arabic)
 		fromRoman := ConvertToArabic(roman)
