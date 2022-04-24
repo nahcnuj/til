@@ -45,9 +45,9 @@ func (r RomanNumerals) Exists(symbols ...byte) bool {
 	return false
 }
 
-type RomanNumeralString string
+type romanNumeralString string
 
-func (s RomanNumeralString) Symbols() (symbols [][]byte) {
+func (s romanNumeralString) Symbols() (symbols [][]byte) {
 	for i := 0; i < len(s); i++ {
 		symbol := s[i]
 		if i+1 < len(s) && isSubtractive(symbol) && allRomanNumerals.Exists(symbol, s[i+1]) {
@@ -77,7 +77,7 @@ func ConvertToRoman(arabic int) string {
 
 func ConvertToArabic(roman string) int {
 	total := 0
-	for _, symbol := range RomanNumeralString(roman).Symbols() {
+	for _, symbol := range romanNumeralString(roman).Symbols() {
 		total += allRomanNumerals.ValueOf(symbol...)
 	}
 	return total
