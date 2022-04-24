@@ -3,6 +3,8 @@ package blogposts_test // appending "_test" to make tests closer to real usage
 import (
 	"testing"
 	"testing/fstest"
+
+	"blogposts"
 )
 
 func TestNewBlogPosts(t *testing.T) {
