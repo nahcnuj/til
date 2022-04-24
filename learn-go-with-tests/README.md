@@ -20,3 +20,5 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 16. Math: (skip)
 17. Reading files: [blogposts](./blogposts/)
 18. Templating: [blogrenderer](./blogrenderer/)
+19. Build an application: [my-app](./my-app/)
+    1. HTTP server

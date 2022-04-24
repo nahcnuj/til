@@ -50,6 +50,9 @@
 		},
 		{
 			"path": "blogrenderer"
+		},
+		{
+			"path": "my-app"
 		}
 	],
 	"settings": {
