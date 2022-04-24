@@ -3,6 +3,7 @@ package blogposts_test // appending "_test" to make tests closer to real usage
 import (
 	"errors"
 	"io/fs"
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -12,8 +13,8 @@ import (
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("create posts from FS", func(t *testing.T) {
 		fs := fstest.MapFS{
-			"hello world.md":  {Data: []byte("hello")},
-			"hello-world2.md": {Data: []byte("コニチハ")},
+			"hello world.md":  {Data: []byte("Title: Post 1")},
+			"hello-world2.md": {Data: []byte("Title: テスト投稿2")},
 		}
 
 		posts, err := blogposts.FromFS(fs)
@@ -24,6 +25,13 @@ func TestNewBlogPosts(t *testing.T) {
 
 		if len(posts) != len(fs) {
 			t.Errorf("got %d posts, wanted %d posts", len(posts), len(fs))
+		}
+
+		got := posts[0]
+		want := blogposts.Post{Title: "Post 1"}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %+v, want %+v", got, want)
 		}
 	})
 
