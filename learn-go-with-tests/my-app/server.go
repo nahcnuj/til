@@ -19,3 +19,7 @@ func (s *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprint(w, s.store.GetPlayerScore(player))
 }
+
+func NewServer(store PlayerStore) *PlayerServer {
+	return &PlayerServer{store}
+}
