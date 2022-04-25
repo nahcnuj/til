@@ -1,3 +1,7 @@
 package my_app
 
-func PlayerServer() {}
+import (
+	"net/http"
+)
+
+func PlayerServer(w http.ResponseWriter, r *http.Request) {}
