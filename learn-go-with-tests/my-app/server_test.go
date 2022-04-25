@@ -32,6 +32,7 @@ func TestGetPlayers(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "20")
+		assertStatus(t, response.Code, http.StatusOK)
 	})
 
 	t.Run("return Floyd's score", func(t *testing.T) {
@@ -41,6 +42,7 @@ func TestGetPlayers(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "10")
+		assertStatus(t, response.Code, http.StatusOK)
 	})
 
 	t.Run("return 404 on missing players", func(t *testing.T) {
