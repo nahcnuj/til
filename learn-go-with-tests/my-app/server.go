@@ -8,6 +8,7 @@ import (
 
 type PlayerStore interface {
 	GetPlayerScore(player string) int
+	RecordWin(name string)
 }
 
 type PlayerServer struct {
