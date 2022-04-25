@@ -20,7 +20,7 @@ func (s *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		s.showScore(w, r)
 	case http.MethodPost:
-		s.recordWin(w)
+		s.recordWin(w, r)
 	}
 }
 
@@ -41,7 +41,8 @@ func (s *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, score)
 }
 
-func (s *PlayerServer) recordWin(w http.ResponseWriter) {
-	s.store.RecordWin("Bob")
+func (s *PlayerServer) recordWin(w http.ResponseWriter, r *http.Request) {
+	player := strings.TrimPrefix(r.URL.Path, "/players/")
+	s.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }
