@@ -1,15 +1,13 @@
 package main
 
 import (
-	"countdown"
-	"os"
-	"time"
+	"log"
+	"net/http"
+
+	app "github.com/nahcnuj/til/learn-go-with-tests/my-app"
 )
 
 func main() {
-	sleeper := &countdown.ConfigurableSleeper{
-		Duration:  1 * time.Second,
-		SleepImpl: time.Sleep,
-	}
-	countdown.Countdown(os.Stdout, sleeper)
+	handler := http.HandlerFunc(app.PlayerServer)
+	log.Fatal(http.ListenAndServe(":5000", handler))
 }
