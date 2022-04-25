@@ -49,12 +49,7 @@ func TestGetPlayers(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		got := response.Code
-		want := http.StatusNotFound
-
-		if got != want {
-			t.Errorf("got status %d, want %d", got, want)
-		}
+		assertStatus(t, response.Code, http.StatusNotFound)
 	})
 }
 
@@ -66,5 +61,12 @@ func assertResponseBody(t testing.TB, got, want string) {
 	t.Helper()
 	if got != want {
 		t.Errorf("response body is wrong, got %q, want %q", got, want)
+	}
+}
+
+func assertStatus(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("status code is wrong, got %d, want %d", got, want)
 	}
 }
