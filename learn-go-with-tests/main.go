@@ -7,17 +7,7 @@ import (
 	app "github.com/nahcnuj/til/learn-go-with-tests/my-app"
 )
 
-type InMemoryPlayerStore struct{}
-
-func (s *InMemoryPlayerStore) GetPlayerScore(player string) int {
-	return 123
-}
-
-func (s *InMemoryPlayerStore) RecordWin(player string) {
-
-}
-
 func main() {
-	server := app.NewServer(&InMemoryPlayerStore{})
+	server := app.NewServer(&app.InMemoryPlayerStore{})
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
