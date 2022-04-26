@@ -1,11 +1,14 @@
 package my_app
 
+import "sync"
+
 type InMemoryPlayerStore struct {
 	score map[string]int
+	mu sync.Mutex
 }
 
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
-	return &InMemoryPlayerStore{map[string]int{}}
+	return &InMemoryPlayerStore{score: map[string]int{}}
 }
 
 func (s *InMemoryPlayerStore) GetPlayerScore(player string) int {
@@ -13,5 +16,8 @@ func (s *InMemoryPlayerStore) GetPlayerScore(player string) int {
 }
 
 func (s *InMemoryPlayerStore) RecordWin(player string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	s.score[player]++
 }
