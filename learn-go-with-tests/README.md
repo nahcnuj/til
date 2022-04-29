@@ -22,3 +22,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
 18. Templating: [blogrenderer](./blogrenderer/)
 19. Build an application: [my-app](./my-app/)
     1. HTTP server
+    2. JSON, routing and embedding
