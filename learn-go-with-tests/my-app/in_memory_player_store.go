@@ -4,7 +4,7 @@ import "sync"
 
 type InMemoryPlayerStore struct {
 	score map[string]int
-	mu sync.Mutex
+	mu    sync.Mutex
 }
 
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
@@ -20,4 +20,9 @@ func (s *InMemoryPlayerStore) RecordWin(player string) {
 	defer s.mu.Unlock()
 
 	s.score[player]++
+}
+
+func (s *InMemoryPlayerStore) GetLeague() []Player {
+	// TODO: implement
+	return nil
 }
