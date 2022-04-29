@@ -58,3 +58,8 @@ func (s *PlayerServer) recordWin(w http.ResponseWriter, player string) {
 	s.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }
+
+type Player struct {
+	Name string
+	Wins int
+}
