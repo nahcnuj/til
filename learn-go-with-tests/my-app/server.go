@@ -18,12 +18,7 @@ type PlayerServer struct {
 }
 
 func (s *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	leagueTable := []Player{
-		{"Chris", 20},
-	}
-
-	json.NewEncoder(w).Encode(leagueTable)
-
+	json.NewEncoder(w).Encode(s.getLeagueTable())
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -64,6 +59,12 @@ func (s *PlayerServer) showScore(w http.ResponseWriter, player string) {
 func (s *PlayerServer) recordWin(w http.ResponseWriter, player string) {
 	s.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
+}
+
+func (s *PlayerServer) getLeagueTable() []Player {
+	return []Player{
+		{"Chris", 20},
+	}
 }
 
 type Player struct {
