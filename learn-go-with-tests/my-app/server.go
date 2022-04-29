@@ -17,6 +17,19 @@ type PlayerServer struct {
 	http.Handler
 }
 
+func NewServer(store PlayerStore) *PlayerServer {
+	s := new(PlayerServer)
+	s.store = store
+
+	router := http.NewServeMux()
+	router.Handle("/league", http.HandlerFunc(s.leagueHandler))
+	router.Handle("/players/", http.HandlerFunc(s.playersHandler))
+
+	s.Handler = router
+
+	return s
+}
+
 func (s *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(s.getLeagueTable())
 	w.WriteHeader(http.StatusOK)
@@ -31,19 +44,6 @@ func (s *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		s.recordWin(w, player)
 	}
-}
-
-func NewServer(store PlayerStore) *PlayerServer {
-	s := new(PlayerServer)
-	s.store = store
-
-	router := http.NewServeMux()
-	router.Handle("/league", http.HandlerFunc(s.leagueHandler))
-	router.Handle("/players/", http.HandlerFunc(s.playersHandler))
-
-	s.Handler = router
-
-	return s
 }
 
 func (s *PlayerServer) showScore(w http.ResponseWriter, player string) {
