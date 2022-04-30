@@ -13,3 +13,7 @@ func (s *FileSystemPlayerStore) GetLeague() []Player {
 	league, _ := NewLeague(s.database)
 	return league
 }
+
+func (s *FileSystemPlayerStore) GetPlayerScore(player string) int {
+	return 0
+}
