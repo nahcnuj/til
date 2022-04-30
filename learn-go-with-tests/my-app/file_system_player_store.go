@@ -5,7 +5,7 @@ import (
 )
 
 type FileSystemPlayerStore struct {
-	database io.ReadSeeker
+	database io.ReadWriteSeeker
 }
 
 func (s *FileSystemPlayerStore) GetLeague() []Player {
@@ -19,7 +19,6 @@ func (s *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	for _, player := range s.GetLeague() {
 		if player.Name == name {
 			wins = player.Wins
-			break
 		}
 	}
 	return wins
