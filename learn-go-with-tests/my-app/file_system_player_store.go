@@ -1,11 +1,16 @@
 package my_app
 
-import "io"
+import (
+	"encoding/json"
+	"io"
+)
 
 type FileSystemPlayerStore struct {
 	database io.Reader
 }
 
 func (s *FileSystemPlayerStore) GetLeague() []Player {
-	return nil
+	var league []Player
+	json.NewDecoder(s.database).Decode(&league)
+	return league
 }
