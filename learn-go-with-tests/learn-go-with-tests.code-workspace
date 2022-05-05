@@ -60,6 +60,7 @@
 		"go.lintFlags": [
 			"--fast"
 		],
+		"go.toolsManagement.go": "/usr/local/go/bin/go",
 		"editor.formatOnSave": true,
 	},
 	"extensions": {
