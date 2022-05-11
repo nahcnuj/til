@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	app "github.com/nahcnuj/til/learn-go-with-tests/my-app"
+	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
 const dbFileName = "db.json"
