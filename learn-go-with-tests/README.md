@@ -24,6 +24,7 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
     19. Generics: (skip)
     20. Revisiting arrays and slices with generics: (skip)
 2. Build an application: [app](./app/)
-    1. HTTP server
-    2. JSON, routing and embedding
-    3. IO and sorting
+    1. HTTP server (done)
+    2. JSON, routing and embedding (done)
+    3. IO and sorting (done)
+    4. Command line & package structure (wip)
