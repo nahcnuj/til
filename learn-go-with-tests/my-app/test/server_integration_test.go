@@ -17,7 +17,10 @@ import (
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, "")
 	defer cleanDatabase()
-	store := app.NewFileSystemPlayerStore(database)
+
+	store, err := app.NewFileSystemPlayerStore(database)
+	assertNoError(t, err)
+
 	server := app.NewServer(store)
 	player := "Pepper"
 
@@ -91,6 +94,13 @@ func assertLeague(t testing.TB, got, want []app.Player) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("league table is wrong, got %v, want %v", got, want)
+	}
+}
+
+func assertNoError(t testing.TB, err error) {
+	t.Helper()
+	if err != nil {
+		t.Fatalf("did not expect an error but got one, %v", err)
 	}
 }
 
