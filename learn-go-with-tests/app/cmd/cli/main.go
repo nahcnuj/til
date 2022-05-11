@@ -24,6 +24,6 @@ func main() {
 		log.Fatalf("could not create player store from the file, %v", err)
 	}
 
-	game := app.CLI{store, os.Stdin}
+	game := app.NewCLI(store, os.Stdin)
 	game.PlayPoker()
 }
