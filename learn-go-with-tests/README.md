@@ -27,4 +27,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
     1. HTTP server (done)
     2. JSON, routing and embedding (done)
     3. IO and sorting (done)
-    4. Command line & package structure (wip)
+    4. Command line & package structure (done)
