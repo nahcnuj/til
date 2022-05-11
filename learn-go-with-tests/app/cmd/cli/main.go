@@ -14,15 +14,11 @@ func main() {
 	fmt.Println("Let's play poker")
 	fmt.Println("Type '{Name} wins' to record a win")
 
-	db, err := os.OpenFile(dbFileName, os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		log.Fatalf("could not open %s, %v", dbFileName, err)
-	}
-
-	store, err := app.NewFileSystemPlayerStore(db)
+	store, close, err := app.NewFileSystemPlayerStoreFromFile(dbFileName)
 	if err != nil {
 		log.Fatalf("could not create player store from the file, %v", err)
 	}
+	defer close()
 
 	game := app.NewCLI(store, os.Stdin)
 	game.PlayPoker()
