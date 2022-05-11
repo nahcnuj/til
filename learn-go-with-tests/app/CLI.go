@@ -16,10 +16,15 @@ func NewCLI(store PlayerStore, in io.Reader) *CLI {
 }
 
 func (cli *CLI) PlayPoker() {
-	cli.in.Scan()
-	cli.store.RecordWin(extractWinner(cli.in.Text()))
+	userInput := cli.readLine()
+	cli.store.RecordWin(extractWinner(userInput))
 }
 
 func extractWinner(input string) string {
 	return strings.TrimSuffix(input, " wins")
+}
+
+func (cli *CLI) readLine() string {
+	cli.in.Scan()
+	return cli.in.Text()
 }
