@@ -1,4 +1,4 @@
-package my_app
+package app
 
 import (
 	"sync"

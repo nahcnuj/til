@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 
-	app "github.com/nahcnuj/til/learn-go-with-tests/my-app"
+	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {

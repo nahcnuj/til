@@ -23,7 +23,7 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
     18. Templating: [blogrenderer](./blogrenderer/)
     19. Generics: (skip)
     20. Revisiting arrays and slices with generics: (skip)
-2. Build an application: [my-app](./my-app/)
+2. Build an application: [app](./app/)
     1. HTTP server
     2. JSON, routing and embedding
     3. IO and sorting
