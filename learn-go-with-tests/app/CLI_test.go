@@ -3,24 +3,26 @@ package app_test
 import (
 	"strings"
 	"testing"
+
+	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
-		store := &StubPlayerStore{}
-		cli := &CLI{store, in}
+		store := &app.StubPlayerStore{}
+		cli := &app.CLI{store, in}
 		cli.PlayPoker()
 
-		assertPlayerWin(t, store, "Chris")
+		app.AssertPlayerWin(t, store, "Chris")
 	})
 
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
-		store := &StubPlayerStore{}
-		cli := &CLI{store, in}
+		store := &app.StubPlayerStore{}
+		cli := &app.CLI{store, in}
 		cli.PlayPoker()
 
-		assertPlayerWin(t, store, "Cleo")
+		app.AssertPlayerWin(t, store, "Cleo")
 	})
 }
