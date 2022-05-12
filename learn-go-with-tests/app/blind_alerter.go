@@ -9,6 +9,7 @@ type BlindAlerter interface {
 	ScheduleAlertAt(duration time.Duration, amount int)
 }
 
+// idiomatically expose also the func type for an interface that has just one function
 type BlindAlerterFunc func(duration time.Duration, amount int)
 
 func (f BlindAlerterFunc) ScheduleAlertAt(duration time.Duration, amount int) {
