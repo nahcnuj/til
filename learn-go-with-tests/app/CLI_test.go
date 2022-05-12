@@ -3,9 +3,24 @@ package app_test
 import (
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
+
+type SpyBlindAlerter struct {
+	alerts []struct {
+		scheduledAt time.Duration
+		amount      int
+	}
+}
+
+func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
+	s.alerts = append(s.alerts, struct {
+		scheduledAt time.Duration
+		amount      int
+	}{duration, amount})
+}
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
