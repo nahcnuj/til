@@ -2,6 +2,7 @@ package app
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strings"
 	"time"
@@ -10,15 +11,19 @@ import (
 type CLI struct {
 	store   PlayerStore
 	in      *bufio.Scanner
+	out     io.Writer
 	alerter BlindAlerter
 }
 
 func NewCLI(store PlayerStore, in io.Reader, out io.Writer, alerter BlindAlerter) *CLI {
-	return &CLI{store, bufio.NewScanner(in), alerter}
+	return &CLI{store, bufio.NewScanner(in), out, alerter}
 }
 
 func (cli *CLI) PlayPoker() {
+	fmt.Fprintf(cli.out, "Please enter the number of players: ")
+
 	cli.scheduleBlindAlerts()
+
 	userInput := cli.readLine()
 	cli.store.RecordWin(extractWinner(userInput))
 }
