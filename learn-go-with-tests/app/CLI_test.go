@@ -27,39 +27,8 @@ func (g *SpyGame) Finish(winner string) {
 }
 
 func TestCLI(t *testing.T) {
-	t.Run("record Chris win from user input", func(t *testing.T) {
-		in := userSends("5", "Chris wins")
-		game := &SpyGame{}
-
-		cli := app.NewCLI(in, dummyStdOut, game)
-		cli.PlayPoker()
-
-		assertWinner(t, game.FinishedWith, "Chris")
-	})
-
-	t.Run("record Cleo win from user input", func(t *testing.T) {
-		in := userSends("5", "Cleo wins")
-		game := &SpyGame{}
-
-		cli := app.NewCLI(in, dummyStdOut, game)
-		cli.PlayPoker()
-
-		assertWinner(t, game.FinishedWith, "Cleo")
-	})
-
-	t.Run("start with 5 players and finish", func(t *testing.T) {
-		in := userSends("5", "Chris wins")
-		game := &SpyGame{}
-
-		cli := app.NewCLI(in, dummyStdOut, game)
-		cli.PlayPoker()
-
-		assertNumberOfPlayers(t, game.StartedWith, 5)
-		assertWinner(t, game.FinishedWith, "Chris")
-	})
-
-	t.Run("prompt the user to enter the number of players first", func(t *testing.T) {
-		in := userSends("7")
+	t.Run("start a game with 3 players and finish it with Chris as the winner", func(t *testing.T) {
+		in := userSends("3", "Chris wins")
 		stdout := &bytes.Buffer{}
 		game := &SpyGame{}
 
@@ -67,7 +36,21 @@ func TestCLI(t *testing.T) {
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
-		assertNumberOfPlayers(t, game.StartedWith, 7)
+		assertNumberOfPlayers(t, game.StartedWith, 3)
+		assertWinner(t, game.FinishedWith, "Chris")
+	})
+
+	t.Run("start a game with 8 players and record Cleo as the winner", func(t *testing.T) {
+		in := userSends("8", "Cleo wins")
+		stdout := &bytes.Buffer{}
+		game := &SpyGame{}
+
+		cli := app.NewCLI(in, stdout, game)
+		cli.PlayPoker()
+
+		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
+		assertNumberOfPlayers(t, game.StartedWith, 8)
+		assertWinner(t, game.FinishedWith, "Cleo")
 	})
 
 	t.Run("print an error if a non numeric value is entered", func(t *testing.T) {
