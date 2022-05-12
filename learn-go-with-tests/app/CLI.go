@@ -28,7 +28,8 @@ func (cli *CLI) PlayPoker() {
 	cli.game.Start(numberOfPlayers)
 
 	userInput := cli.readLine()
-	cli.game.Finish(extractWinner(userInput))
+	winner := extractWinner(userInput)
+	cli.game.Finish(winner)
 }
 
 func extractWinner(input string) string {
