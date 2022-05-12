@@ -89,7 +89,7 @@ func TestCLI(t *testing.T) {
 		}
 
 		gotPrompt := stdout.String()
-		wantPrompt := app.PlayerPrompt + "you're so silly"
+		wantPrompt := app.PlayerPrompt + app.BadPlayerInputError
 
 		if gotPrompt != wantPrompt {
 			t.Errorf("wrong error message, got %q, want %q", gotPrompt, wantPrompt)
