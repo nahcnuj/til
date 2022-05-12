@@ -1,6 +1,7 @@
 package app_test
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 	"testing"
@@ -22,12 +23,12 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 }
 
 func TestCLI(t *testing.T) {
-	dummySpyAlerter := &SpyBlindAlerter{}
+	dummyBlindAlerter := &SpyBlindAlerter{}
 
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
 		store := &app.StubPlayerStore{}
-		cli := app.NewCLI(store, in, dummySpyAlerter)
+		cli := app.NewCLI(store, in, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		app.AssertPlayerWin(t, store, "Chris")
@@ -36,7 +37,7 @@ func TestCLI(t *testing.T) {
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
 		store := &app.StubPlayerStore{}
-		cli := app.NewCLI(store, in, dummySpyAlerter)
+		cli := app.NewCLI(store, in, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		app.AssertPlayerWin(t, store, "Cleo")
