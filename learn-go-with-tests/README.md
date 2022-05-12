@@ -28,3 +28,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
     2. JSON, routing and embedding (done)
     3. IO and sorting (done)
     4. Command line & package structure (done)
+    5. Time (wip)
