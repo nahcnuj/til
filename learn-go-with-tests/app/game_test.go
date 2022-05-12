@@ -23,11 +23,11 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 var dummyPlayerStore = &app.StubPlayerStore{}
 var dummyBlindAlerter = &SpyBlindAlerter{}
 
-func TestGame_Start(t *testing.T) {
+func TestTexasHoldem_Start(t *testing.T) {
 	t.Run("schedule printing of blind values for 5 players", func(t *testing.T) {
 		store := &app.StubPlayerStore{}
 		blindAlerter := &SpyBlindAlerter{}
-		game := app.NewGame(store, blindAlerter)
+		game := app.NewTexasHoldem(store, blindAlerter)
 		game.Start(5)
 
 		cases := []scheduledAlert{
@@ -48,7 +48,7 @@ func TestGame_Start(t *testing.T) {
 
 	t.Run("schedule printing of blind values for 7 players", func(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
-		game := app.NewGame(dummyPlayerStore, blindAlerter)
+		game := app.NewTexasHoldem(dummyPlayerStore, blindAlerter)
 		game.Start(7)
 
 		cases := []scheduledAlert{
@@ -88,11 +88,11 @@ func assertScheduledAlerts(t testing.TB, cases, alerts []scheduledAlert) {
 	}
 }
 
-func TestGame_Finish(t *testing.T) {
+func TestTexasHoldem_Finish(t *testing.T) {
 	store := &app.StubPlayerStore{}
 	winner := "Chris"
 
-	game := app.NewGame(store, dummyBlindAlerter)
+	game := app.NewTexasHoldem(store, dummyBlindAlerter)
 	game.Finish(winner)
 
 	app.AssertPlayerWin(t, store, winner)
