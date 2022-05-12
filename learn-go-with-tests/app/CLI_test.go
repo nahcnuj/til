@@ -2,6 +2,7 @@ package app_test
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 
@@ -27,7 +28,7 @@ func (g *SpyGame) Finish(winner string) {
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
-		in := strings.NewReader("5\nChris wins\n")
+		in := userSends("5", "Chris wins")
 		game := &SpyGame{}
 
 		cli := app.NewCLI(in, dummyStdOut, game)
@@ -37,7 +38,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("record Cleo win from user input", func(t *testing.T) {
-		in := strings.NewReader("5\nCleo wins\n")
+		in := userSends("5", "Cleo wins")
 		game := &SpyGame{}
 
 		cli := app.NewCLI(in, dummyStdOut, game)
@@ -47,7 +48,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("start with 5 players and finish", func(t *testing.T) {
-		in := strings.NewReader("5\nChris wins\n")
+		in := userSends("5", "Chris wins")
 		game := &SpyGame{}
 
 		cli := app.NewCLI(in, dummyStdOut, game)
@@ -58,7 +59,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("prompt the user to enter the number of players first", func(t *testing.T) {
-		in := strings.NewReader("7\n")
+		in := userSends("7")
 		stdout := &bytes.Buffer{}
 		game := &SpyGame{}
 
@@ -70,8 +71,7 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("print an error if a non numeric value is entered", func(t *testing.T) {
-		in := strings.NewReader("Pies\n")
-
+		in := userSends("Pies")
 		stdout := &bytes.Buffer{}
 		game := &SpyGame{}
 
@@ -84,6 +84,14 @@ func TestCLI(t *testing.T) {
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadPlayerInputError)
 	})
+}
+
+func userSends(inputs ...string) io.Reader {
+	s := ""
+	for _, input := range inputs {
+		s += input + "\n"
+	}
+	return strings.NewReader(s)
 }
 
 func assertNumberOfPlayers(t testing.TB, got, want int) {
