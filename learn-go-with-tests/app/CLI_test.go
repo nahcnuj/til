@@ -61,10 +61,7 @@ func TestCLI(t *testing.T) {
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
-		if game.CalledStart {
-			t.Error("game should not have started")
-		}
-
+		assertGameNotStarted(t, game)
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadPlayerInputError)
 	})
 }
@@ -99,4 +96,12 @@ func assertMessagesSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...st
 	if got != want {
 		t.Errorf("got %q sent to user, but want %+v", got, messages)
 	}
+}
+
+func assertGameNotStarted(t testing.TB, game *SpyGame) {
+	t.Helper()
+	if game.CalledStart {
+		t.Error("game should not have started")
+	}
+
 }
