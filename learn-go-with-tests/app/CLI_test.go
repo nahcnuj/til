@@ -10,12 +10,10 @@ import (
 	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
-func TestCLI(t *testing.T) {
-	dummyPlayerStore := &app.StubPlayerStore{}
-	dummyBlindAlerter := &SpyBlindAlerter{}
-	dummyStdIn := &bytes.Buffer{}
-	dummyStdOut := &bytes.Buffer{}
+var dummyStdIn = &bytes.Buffer{}
+var dummyStdOut = &bytes.Buffer{}
 
+func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("5\nChris wins\n")
 		store := &app.StubPlayerStore{}
