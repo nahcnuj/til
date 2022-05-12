@@ -36,8 +36,8 @@ func TestCLI(t *testing.T) {
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
-		assertNumberOfPlayers(t, game.StartedWith, 3)
-		assertWinner(t, game.FinishedWith, "Chris")
+		assertGameStartedWith(t, game, 3)
+		assertGameFinishedWith(t, game, "Chris")
 	})
 
 	t.Run("start a game with 8 players and record Cleo as the winner", func(t *testing.T) {
@@ -49,8 +49,8 @@ func TestCLI(t *testing.T) {
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
-		assertNumberOfPlayers(t, game.StartedWith, 8)
-		assertWinner(t, game.FinishedWith, "Cleo")
+		assertGameStartedWith(t, game, 8)
+		assertGameFinishedWith(t, game, "Cleo")
 	})
 
 	t.Run("print an error if a non numeric value is entered", func(t *testing.T) {
@@ -74,17 +74,17 @@ func userSends(inputs ...string) io.Reader {
 	return strings.NewReader(s)
 }
 
-func assertNumberOfPlayers(t testing.TB, got, want int) {
+func assertGameStartedWith(t testing.TB, game *SpyGame, want int) {
 	t.Helper()
-	if got != want {
-		t.Errorf("expected %d players, but got %d", want, got)
+	if game.StartedWith != want {
+		t.Errorf("expected %d players, but got %d", want, game.StartedWith)
 	}
 }
 
-func assertWinner(t testing.TB, got, want string) {
+func assertGameFinishedWith(t testing.TB, game *SpyGame, want string) {
 	t.Helper()
-	if got != want {
-		t.Errorf("expected winner %s, but got %q", want, got)
+	if game.FinishedWith != want {
+		t.Errorf("expected winner %s, but got %q", want, game.FinishedWith)
 	}
 }
 
