@@ -63,24 +63,27 @@ func TestCLI(t *testing.T) {
 			{100 * time.Minute, 64000},
 		}
 
-		for i, c := range cases {
-			t.Run(fmt.Sprintf("%d scheduled for %v", c.amount, c.at), func(t *testing.T) {
+		for i, want := range cases {
+			t.Run(fmt.Sprintf("%d scheduled for %v", want.amount, want.at), func(t *testing.T) {
 				if len(blindAlerter.alerts) <= i {
 					t.Fatalf("alert #%d was not scheduled, %v", i, blindAlerter.alerts)
 				}
 
-				alert := blindAlerter.alerts[i]
-
-				gotAmount := alert.amount
-				if gotAmount != c.amount {
-					t.Errorf("wrong blind amount, got %d, want %d", gotAmount, c.amount)
-				}
-
-				gotScheduledTime := alert.at
-				if gotScheduledTime != c.at {
-					t.Errorf("wrong time scheduled at, got %v, want %v", gotScheduledTime, c.at)
-				}
+				got := blindAlerter.alerts[i]
+				assertScheduledAlert(t, got, want)
 			})
 		}
 	})
+}
+
+func assertScheduledAlert(t testing.TB, got, want scheduledAlert) {
+	t.Helper()
+
+	if got.amount != want.amount {
+		t.Errorf("wrong blind amount, got %d, want %d", got.amount, want.amount)
+	}
+
+	if got.at != want.at {
+		t.Errorf("wrong time scheduled at, got %v, want %v", got.at, want.at)
+	}
 }
