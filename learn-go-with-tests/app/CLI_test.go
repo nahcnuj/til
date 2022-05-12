@@ -13,6 +13,7 @@ var dummyStdOut = &bytes.Buffer{}
 
 type SpyGame struct {
 	CalledStart  bool
+	CalledFinish bool
 	StartedWith  int
 	FinishedWith string
 }
@@ -23,6 +24,7 @@ func (g *SpyGame) Start(numberOfPlayers int) {
 }
 
 func (g *SpyGame) Finish(winner string) {
+	g.CalledFinish = true
 	g.FinishedWith = winner
 }
 
@@ -63,6 +65,19 @@ func TestCLI(t *testing.T) {
 
 		assertGameNotStarted(t, game)
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadPlayerInputError)
+	})
+
+	t.Run("print an error if winner could not be parsed", func(t *testing.T) {
+		in := userSends("5", "Lloyd is a killer")
+		stdout := &bytes.Buffer{}
+		game := &SpyGame{}
+
+		cli := app.NewCLI(in, stdout, game)
+		cli.PlayPoker()
+
+		if game.CalledFinish {
+			t.Error("game should not have finished")
+		}
 	})
 }
 
