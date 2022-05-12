@@ -10,6 +10,7 @@ import (
 
 const PlayerPrompt = "Please enter the number of players: "
 const BadPlayerInputError = "Bad value for number of players"
+const BadWinnerInputError = "could not recognize a winner"
 
 type CLI struct {
 	in   *bufio.Scanner
@@ -34,7 +35,7 @@ func (cli *CLI) PlayPoker() {
 
 	userInput := cli.readLine()
 	if !strings.HasSuffix(userInput, " wins") {
-		fmt.Fprint(cli.out, "could not recognize a winner")
+		fmt.Fprint(cli.out, BadWinnerInputError)
 		return
 	}
 	winner := extractWinner(userInput)

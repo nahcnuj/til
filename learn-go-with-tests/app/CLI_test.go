@@ -78,7 +78,7 @@ func TestCLI(t *testing.T) {
 		if game.CalledFinish {
 			t.Error("game should not have finished")
 		}
-		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, "could not recognize a winner")
+		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadWinnerInputError)
 	})
 }
 
