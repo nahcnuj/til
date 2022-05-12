@@ -11,11 +11,13 @@ import (
 var dummyStdOut = &bytes.Buffer{}
 
 type SpyGame struct {
+	CalledStart  bool
 	StartedWith  int
 	FinishedWith string
 }
 
 func (g *SpyGame) Start(numberOfPlayers int) {
+	g.CalledStart = true
 	g.StartedWith = numberOfPlayers
 }
 
@@ -71,6 +73,20 @@ func TestCLI(t *testing.T) {
 		}
 
 		assertNumberOfPlayers(t, game.StartedWith, 7)
+	})
+
+	t.Run("print an error if a non numeric value is entered", func(t *testing.T) {
+		in := strings.NewReader("Pies\n")
+
+		stdout := &bytes.Buffer{}
+		game := &SpyGame{}
+
+		cli := app.NewCLI(in, stdout, game)
+		cli.PlayPoker()
+
+		if game.CalledStart {
+			t.Error("game should not have started")
+		}
 	})
 }
 
