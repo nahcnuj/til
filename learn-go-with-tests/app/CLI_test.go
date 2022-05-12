@@ -26,11 +26,12 @@ func TestCLI(t *testing.T) {
 	dummyPlayerStore := &app.StubPlayerStore{}
 	dummyBlindAlerter := &SpyBlindAlerter{}
 	dummyStdIn := &bytes.Buffer{}
+	dummyStdOut := &bytes.Buffer{}
 
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
 		store := &app.StubPlayerStore{}
-		cli := app.NewCLI(store, in, dummyBlindAlerter)
+		cli := app.NewCLI(store, in, dummyStdOut, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		app.AssertPlayerWin(t, store, "Chris")
@@ -39,7 +40,7 @@ func TestCLI(t *testing.T) {
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("Cleo wins\n")
 		store := &app.StubPlayerStore{}
-		cli := app.NewCLI(store, in, dummyBlindAlerter)
+		cli := app.NewCLI(store, in, dummyStdOut, dummyBlindAlerter)
 		cli.PlayPoker()
 
 		app.AssertPlayerWin(t, store, "Cleo")
@@ -49,7 +50,7 @@ func TestCLI(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
 		store := &app.StubPlayerStore{}
 		blindAlerter := &SpyBlindAlerter{}
-		cli := app.NewCLI(store, in, blindAlerter)
+		cli := app.NewCLI(store, in, dummyStdOut, blindAlerter)
 		cli.PlayPoker()
 
 		cases := []scheduledAlert{
