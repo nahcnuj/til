@@ -9,18 +9,16 @@ import (
 	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
+type scheduledAlert struct {
+	at     time.Duration
+	amount int
+}
 type SpyBlindAlerter struct {
-	alerts []struct {
-		scheduledAt time.Duration
-		amount      int
-	}
+	alerts []scheduledAlert
 }
 
 func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
-	s.alerts = append(s.alerts, struct {
-		scheduledAt time.Duration
-		amount      int
-	}{duration, amount})
+	s.alerts = append(s.alerts, scheduledAlert{duration, amount})
 }
 
 func TestCLI(t *testing.T) {
@@ -51,10 +49,7 @@ func TestCLI(t *testing.T) {
 		cli := app.NewCLI(store, in, blindAlerter)
 		cli.PlayPoker()
 
-		cases := []struct {
-			expectedScheduleTime time.Duration
-			expectedAmount       int
-		}{
+		cases := []scheduledAlert{
 			{0 * time.Minute, 100},
 			{10 * time.Minute, 200},
 			{20 * time.Minute, 400},
@@ -69,7 +64,7 @@ func TestCLI(t *testing.T) {
 		}
 
 		for i, c := range cases {
-			t.Run(fmt.Sprintf("%d scheduled for %v", c.expectedAmount, c.expectedScheduleTime), func(t *testing.T) {
+			t.Run(fmt.Sprintf("%d scheduled for %v", c.amount, c.at), func(t *testing.T) {
 				if len(blindAlerter.alerts) <= i {
 					t.Fatalf("alert #%d was not scheduled, %v", i, blindAlerter.alerts)
 				}
@@ -77,13 +72,13 @@ func TestCLI(t *testing.T) {
 				alert := blindAlerter.alerts[i]
 
 				gotAmount := alert.amount
-				if gotAmount != c.expectedAmount {
-					t.Errorf("wrong blind amount, got %d, want %d", gotAmount, c.expectedAmount)
+				if gotAmount != c.amount {
+					t.Errorf("wrong blind amount, got %d, want %d", gotAmount, c.amount)
 				}
 
-				gotScheduledTime := alert.scheduledAt
-				if gotScheduledTime != c.expectedScheduleTime {
-					t.Errorf("wrong time scheduled at, got %v, want %v", gotScheduledTime, c.expectedScheduleTime)
+				gotScheduledTime := alert.at
+				if gotScheduledTime != c.at {
+					t.Errorf("wrong time scheduled at, got %v, want %v", gotScheduledTime, c.at)
 				}
 			})
 		}
