@@ -65,13 +65,7 @@ func TestCLI(t *testing.T) {
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
-		gotPrompt := stdout.String()
-		wantPrompt := app.PlayerPrompt
-
-		if gotPrompt != wantPrompt {
-			t.Errorf("wrong prompt, got %q, want %q", gotPrompt, wantPrompt)
-		}
-
+		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
 		assertNumberOfPlayers(t, game.StartedWith, 7)
 	})
 
@@ -88,12 +82,7 @@ func TestCLI(t *testing.T) {
 			t.Error("game should not have started")
 		}
 
-		gotPrompt := stdout.String()
-		wantPrompt := app.PlayerPrompt + app.BadPlayerInputError
-
-		if gotPrompt != wantPrompt {
-			t.Errorf("wrong error message, got %q, want %q", gotPrompt, wantPrompt)
-		}
+		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadPlayerInputError)
 	})
 }
 
@@ -108,5 +97,15 @@ func assertWinner(t testing.TB, got, want string) {
 	t.Helper()
 	if got != want {
 		t.Errorf("expected winner %s, but got %q", want, got)
+	}
+}
+
+func assertMessagesSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...string) {
+	t.Helper()
+
+	got := stdout.String()
+	want := strings.Join(messages, "")
+	if got != want {
+		t.Errorf("got %q sent to user, but want %+v", got, messages)
 	}
 }
