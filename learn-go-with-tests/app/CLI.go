@@ -27,7 +27,7 @@ func (cli *CLI) PlayPoker() {
 
 	numberOfPlayers, err := strconv.Atoi(cli.readLine())
 	if err != nil {
-		fmt.Fprintf(cli.out, BadPlayerInputError)
+		fmt.Fprint(cli.out, BadPlayerInputError)
 		return
 	}
 
