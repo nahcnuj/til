@@ -23,7 +23,9 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 }
 
 func TestCLI(t *testing.T) {
+	dummyPlayerStore := &app.StubPlayerStore{}
 	dummyBlindAlerter := &SpyBlindAlerter{}
+	dummyStdIn := &bytes.Buffer{}
 
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
@@ -73,6 +75,19 @@ func TestCLI(t *testing.T) {
 				got := blindAlerter.alerts[i]
 				assertScheduledAlert(t, got, want)
 			})
+		}
+	})
+
+	t.Run("prompt the user to enter the number of players first", func(t *testing.T) {
+		stdout := &bytes.Buffer{}
+		cli := app.NewCLI(dummyPlayerStore, dummyStdIn, stdout, dummyBlindAlerter)
+		cli.PlayPoker()
+
+		got := stdout.String()
+		want := "Please enter the number of players: "
+
+		if got != want {
+			t.Errorf("wrong prompt, got %q, want %q", got, want)
 		}
 	})
 }
