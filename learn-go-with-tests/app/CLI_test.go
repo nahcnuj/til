@@ -33,9 +33,7 @@ func TestCLI(t *testing.T) {
 		cli := app.NewCLI(in, dummyStdOut, game)
 		cli.PlayPoker()
 
-		if game.FinishedWith != "Chris" {
-			t.Errorf("expected winner Chris, but got %q", game.FinishedWith)
-		}
+		assertWinner(t, game.FinishedWith, "Chris")
 	})
 
 	t.Run("record Cleo win from user input", func(t *testing.T) {
@@ -45,9 +43,7 @@ func TestCLI(t *testing.T) {
 		cli := app.NewCLI(in, dummyStdOut, game)
 		cli.PlayPoker()
 
-		if game.FinishedWith != "Cleo" {
-			t.Errorf("expected winner Cleo, but got %q", game.FinishedWith)
-		}
+		assertWinner(t, game.FinishedWith, "Cleo")
 	})
 
 	t.Run("schedule printing of blind values for 5 players", func(t *testing.T) {
@@ -104,4 +100,11 @@ func TestCLI(t *testing.T) {
 			t.Errorf("expected 7 players but got %d", game.StartedWith)
 		}
 	})
+}
+
+func assertWinner(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("expected winner %s, but got %q", want, got)
+	}
 }
