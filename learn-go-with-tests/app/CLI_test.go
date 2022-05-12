@@ -14,6 +14,7 @@ type scheduledAlert struct {
 	at     time.Duration
 	amount int
 }
+
 type SpyBlindAlerter struct {
 	alerts []scheduledAlert
 }
@@ -85,7 +86,7 @@ func TestCLI(t *testing.T) {
 		cli.PlayPoker()
 
 		got := stdout.String()
-		want := "Please enter the number of players: "
+		want := app.PlayerPrompt
 
 		if got != want {
 			t.Errorf("wrong prompt, got %q, want %q", got, want)
