@@ -10,19 +10,6 @@ import (
 	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
-type scheduledAlert struct {
-	at     time.Duration
-	amount int
-}
-
-type SpyBlindAlerter struct {
-	alerts []scheduledAlert
-}
-
-func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
-	s.alerts = append(s.alerts, scheduledAlert{duration, amount})
-}
-
 func TestCLI(t *testing.T) {
 	dummyPlayerStore := &app.StubPlayerStore{}
 	dummyBlindAlerter := &SpyBlindAlerter{}
@@ -135,16 +122,4 @@ func TestCLI(t *testing.T) {
 			})
 		}
 	})
-}
-
-func assertScheduledAlert(t testing.TB, got, want scheduledAlert) {
-	t.Helper()
-
-	if got.amount != want.amount {
-		t.Errorf("wrong blind amount, got %d, want %d", got.amount, want.amount)
-	}
-
-	if got.at != want.at {
-		t.Errorf("wrong time scheduled at, got %v, want %v", got.at, want.at)
-	}
 }
