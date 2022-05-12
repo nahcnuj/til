@@ -34,6 +34,7 @@ func (cli *CLI) PlayPoker() {
 
 	userInput := cli.readLine()
 	if !strings.HasSuffix(userInput, " wins") {
+		fmt.Fprint(cli.out, "could not recognize a winner")
 		return
 	}
 	winner := extractWinner(userInput)
