@@ -87,6 +87,13 @@ func TestCLI(t *testing.T) {
 		if game.CalledStart {
 			t.Error("game should not have started")
 		}
+
+		gotPrompt := stdout.String()
+		wantPrompt := app.PlayerPrompt + "you're so silly"
+
+		if gotPrompt != wantPrompt {
+			t.Errorf("wrong error message, got %q, want %q", gotPrompt, wantPrompt)
+		}
 	})
 }
 
