@@ -10,30 +10,44 @@ import (
 	"github.com/nahcnuj/til/learn-go-with-tests/app"
 )
 
-var dummyStdIn = &bytes.Buffer{}
 var dummyStdOut = &bytes.Buffer{}
+
+type SpyGame struct {
+	StartedWith  int
+	FinishedWith string
+}
+
+func (g *SpyGame) Start(numberOfPlayers int) {
+	g.StartedWith = numberOfPlayers
+}
+
+func (g *SpyGame) Finish(winner string) {
+	g.FinishedWith = winner
+}
 
 func TestCLI(t *testing.T) {
 	t.Run("record Chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("5\nChris wins\n")
-		store := &app.StubPlayerStore{}
-		game := app.NewTexasHoldem(store, dummyBlindAlerter)
+		game := &SpyGame{}
 
 		cli := app.NewCLI(in, dummyStdOut, game)
 		cli.PlayPoker()
 
-		app.AssertPlayerWin(t, store, "Chris")
+		if game.FinishedWith != "Chris" {
+			t.Errorf("expected winner Chris, but got %q", game.FinishedWith)
+		}
 	})
 
 	t.Run("record Cleo win from user input", func(t *testing.T) {
 		in := strings.NewReader("5\nCleo wins\n")
-		store := &app.StubPlayerStore{}
-		game := app.NewTexasHoldem(store, dummyBlindAlerter)
+		game := &SpyGame{}
 
 		cli := app.NewCLI(in, dummyStdOut, game)
 		cli.PlayPoker()
 
-		app.AssertPlayerWin(t, store, "Cleo")
+		if game.FinishedWith != "Cleo" {
+			t.Errorf("expected winner Cleo, but got %q", game.FinishedWith)
+		}
 	})
 
 	t.Run("schedule printing of blind values for 5 players", func(t *testing.T) {
@@ -72,52 +86,22 @@ func TestCLI(t *testing.T) {
 	})
 
 	t.Run("prompt the user to enter the number of players first", func(t *testing.T) {
-		stdout := &bytes.Buffer{}
-		game := app.NewTexasHoldem(dummyPlayerStore, dummyBlindAlerter)
-		cli := app.NewCLI(dummyStdIn, stdout, game)
-		cli.PlayPoker()
-
-		got := stdout.String()
-		want := app.PlayerPrompt
-
-		if got != want {
-			t.Errorf("wrong prompt, got %q, want %q", got, want)
-		}
-	})
-
-	t.Run("schedule printing of blind values for 7 players", func(t *testing.T) {
 		in := strings.NewReader("7\n")
 		stdout := &bytes.Buffer{}
-		blindAlerter := &SpyBlindAlerter{}
-		game := app.NewTexasHoldem(dummyPlayerStore, blindAlerter)
+		game := &SpyGame{}
 
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
-		got := stdout.String()
-		want := app.PlayerPrompt
+		gotPrompt := stdout.String()
+		wantPrompt := app.PlayerPrompt
 
-		if got != want {
-			t.Errorf("wrong prompt, got %q, want %q", got, want)
+		if gotPrompt != wantPrompt {
+			t.Errorf("wrong prompt, got %q, want %q", gotPrompt, wantPrompt)
 		}
 
-		cases := []scheduledAlert{
-			{0 * time.Minute, 100},
-			{12 * time.Minute, 200},
-			{24 * time.Minute, 400},
-			{36 * time.Minute, 600},
-			{48 * time.Minute, 1000},
-			{60 * time.Minute, 2000},
-		}
-		for i, want := range cases {
-			t.Run(fmt.Sprint(want), func(t *testing.T) {
-				if len(blindAlerter.alerts) <= i {
-					t.Fatalf("alert #%d was not scheduled, %v", i, blindAlerter.alerts)
-				}
-
-				got := blindAlerter.alerts[i]
-				assertScheduledAlert(t, got, want)
-			})
+		if game.StartedWith != 7 {
+			t.Errorf("expected 7 players but got %d", game.StartedWith)
 		}
 	})
 }
