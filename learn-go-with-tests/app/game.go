@@ -3,6 +3,7 @@ package app
 import "time"
 
 type Game struct {
+	store   PlayerStore
 	alerter BlindAlerter
 }
 
@@ -15,4 +16,8 @@ func (g *Game) Start(numberOfPlayers int) {
 		g.alerter.ScheduleAlertAt(blindTime, amount)
 		blindTime += blindIncrementTime
 	}
+}
+
+func (g *Game) Finish(winner string) {
+	g.store.RecordWin(winner)
 }
