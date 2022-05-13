@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -127,6 +128,7 @@ func TestGame(t *testing.T) {
 			t.Fatalf("could not send message over the websocket: %v", err)
 		}
 
+		time.Sleep(10 * time.Millisecond)
 		AssertPlayerWin(t, store, winner)
 	})
 }
