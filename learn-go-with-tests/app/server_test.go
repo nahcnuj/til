@@ -14,6 +14,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+var dummyGame = &SpyGame{}
+
 func TestGetPlayers(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{
@@ -64,7 +66,7 @@ func TestScoreWins(t *testing.T) {
 		nil,
 		nil,
 	}
-	server := mustMakePlayerServer(t, store)
+	server := mustMakePlayerServer(t, store, dummyGame)
 
 	t.Run("record wins when POST", func(t *testing.T) {
 		player := "Pepper"
@@ -88,7 +90,7 @@ func TestLeague(t *testing.T) {
 		}
 
 		store := &StubPlayerStore{nil, nil, wantedLeague}
-		server := mustMakePlayerServer(t, store)
+		server := mustMakePlayerServer(t, store, dummyGame)
 
 		request := newGetLeagueRequest()
 		response := httptest.NewRecorder()
@@ -104,7 +106,7 @@ func TestLeague(t *testing.T) {
 
 func TestGame(t *testing.T) {
 	t.Run("GET /game returns 200", func(t *testing.T) {
-		server := mustMakePlayerServer(t, &StubPlayerStore{})
+		server := mustMakePlayerServer(t, &StubPlayerStore{}, dummyGame)
 
 		request := newGetGameRequest()
 		response := httptest.NewRecorder()
@@ -146,9 +148,9 @@ func newGetGameRequest() *http.Request {
 	return httptest.NewRequest(http.MethodGet, "/game", nil)
 }
 
-func mustMakePlayerServer(t testing.TB, store PlayerStore) *PlayerServer {
+func mustMakePlayerServer(t testing.TB, store PlayerStore, game Game) *PlayerServer {
 	t.Helper()
-	server, err := NewServer(store)
+	server, err := NewServer(store, game)
 	if err != nil {
 		t.Fatal("could not start a server")
 	}
