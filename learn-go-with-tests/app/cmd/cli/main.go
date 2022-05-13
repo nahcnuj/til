@@ -20,7 +20,7 @@ func main() {
 	}
 	defer close()
 
-	game := app.NewTexasHoldem(store, app.BlindAlerterFunc(app.StdOutAlerter))
+	game := app.NewTexasHoldem(store, app.BlindAlerterFunc(app.Alerter))
 	cli := app.NewCLI(os.Stdin, os.Stdout, game)
 	cli.PlayPoker()
 }

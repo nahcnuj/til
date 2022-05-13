@@ -1,6 +1,9 @@
 package app
 
-import "time"
+import (
+	"os"
+	"time"
+)
 
 type Game interface {
 	Start(numberOfPlayers int)
@@ -22,7 +25,7 @@ func (g *TexasHoldem) Start(numberOfPlayers int) {
 	blinds := []int{100, 200, 400, 600, 1000, 2000, 4000, 8000, 16000, 32000, 64000}
 	blindTime := 0 * time.Minute
 	for _, amount := range blinds {
-		g.alerter.ScheduleAlertAt(blindTime, amount)
+		g.alerter.ScheduleAlertAt(blindTime, amount, os.Stdout)
 		blindTime += blindIncrementTime
 	}
 }
