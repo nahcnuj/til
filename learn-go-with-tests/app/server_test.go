@@ -64,10 +64,7 @@ func TestScoreWins(t *testing.T) {
 		nil,
 		nil,
 	}
-	server, err := NewServer(store)
-	if err != nil {
-		t.Fatal("could not start a server")
-	}
+	server := mustMakePlayerServer(t, store)
 
 	t.Run("record wins when POST", func(t *testing.T) {
 		player := "Pepper"
@@ -90,11 +87,8 @@ func TestLeague(t *testing.T) {
 			{"Tiest", 14},
 		}
 
-		store := StubPlayerStore{nil, nil, wantedLeague}
-		server, err := NewServer(&store)
-		if err != nil {
-			t.Fatal("could not start a server")
-		}
+		store := &StubPlayerStore{nil, nil, wantedLeague}
+		server := mustMakePlayerServer(t, store)
 
 		request := newGetLeagueRequest()
 		response := httptest.NewRecorder()
@@ -110,10 +104,7 @@ func TestLeague(t *testing.T) {
 
 func TestGame(t *testing.T) {
 	t.Run("GET /game returns 200", func(t *testing.T) {
-		server, err := NewServer(&StubPlayerStore{})
-		if err != nil {
-			t.Fatal("could not start a server")
-		}
+		server := mustMakePlayerServer(t, &StubPlayerStore{})
 
 		request := newGetGameRequest()
 		response := httptest.NewRecorder()
@@ -126,12 +117,7 @@ func TestGame(t *testing.T) {
 	t.Run("receive a message over a websocket, which is a game winner", func(t *testing.T) {
 		winner := "Ruth"
 		store := &StubPlayerStore{}
-
-		handler, err := NewServer(store)
-		if err != nil {
-			t.Fatal("could not start a server")
-		}
-		server := httptest.NewServer(handler)
+		server := httptest.NewServer(mustMakePlayerServer(t, store))
 		defer server.Close()
 
 		wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws"
@@ -160,6 +146,15 @@ func newGetLeagueRequest() *http.Request {
 
 func newGetGameRequest() *http.Request {
 	return httptest.NewRequest(http.MethodGet, "/game", nil)
+}
+
+func mustMakePlayerServer(t testing.TB, store PlayerStore) *PlayerServer {
+	t.Helper()
+	server, err := NewServer(store)
+	if err != nil {
+		t.Fatal("could not start a server")
+	}
+	return server
 }
 
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
