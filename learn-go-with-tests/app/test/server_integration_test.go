@@ -21,7 +21,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	store, err := app.NewFileSystemPlayerStore(database)
 	assertNoError(t, err)
 
-	server, err := app.NewServer(store)
+	server, err := app.NewServer(store, &app.SpyGame{})
 	assertNoError(t, err)
 
 	player := "Pepper"

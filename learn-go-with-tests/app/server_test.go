@@ -25,7 +25,7 @@ func TestGetPlayers(t *testing.T) {
 		nil,
 		nil,
 	}
-	server, err := NewServer(&store)
+	server, err := NewServer(&store, dummyGame)
 	if err != nil {
 		t.Fatal("could not start a server")
 	}
