@@ -16,7 +16,9 @@ func main() {
 	}
 	defer close()
 
-	server, err := app.NewServer(store)
+	game := app.NewTexasHoldem(store, app.BlindAlerterFunc(app.Alerter))
+
+	server, err := app.NewServer(store, game)
 	if err != nil {
 		log.Fatal("could not start a server")
 	}
