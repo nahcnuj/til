@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -112,14 +111,22 @@ func (s *playerServerWS) WaitForMsg() string {
 	return string(msg)
 }
 
+func (s *playerServerWS) Write(p []byte) (n int, err error) {
+	err = s.WriteMessage(websocket.TextMessage, p)
+	if err != nil {
+		return 0, err
+	}
+	return len(p), nil
+}
+
 func (s *PlayerServer) wsHandler(w http.ResponseWriter, r *http.Request) {
-	conn := newPlayerServerWS(w, r)
+	ws := newPlayerServerWS(w, r)
 
-	numberOfPlayersMsg := conn.WaitForMsg()
+	numberOfPlayersMsg := ws.WaitForMsg()
 	numberOfPlayers, _ := strconv.Atoi(string(numberOfPlayersMsg))
-	s.game.Start(numberOfPlayers, ioutil.Discard) // TODO: do not discard blind alerts
+	s.game.Start(numberOfPlayers, ws)
 
-	winner := conn.WaitForMsg()
+	winner := ws.WaitForMsg()
 	s.game.Finish(string(winner))
 }
 
