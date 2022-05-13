@@ -3,6 +3,7 @@ package app
 import (
 	"io"
 	"testing"
+	"time"
 )
 
 type StubPlayerStore struct {
@@ -56,17 +57,25 @@ func (g *SpyGame) Finish(winner string) {
 	g.FinishedWith = winner
 }
 
-func AssertGameStartedWith(t testing.TB, game *SpyGame, want int) {
+const timeout = 500 * time.Millisecond
+
+func AssertGameStartedWith(t testing.TB, game *SpyGame, numberOfPlayers int) {
 	t.Helper()
-	if game.StartedWith != want {
-		t.Errorf("expected %d players, but got %d", want, game.StartedWith)
+	passed := retryUntil(timeout, func() bool {
+		return game.StartedWith == numberOfPlayers
+	})
+	if !passed {
+		t.Errorf("expected start called with %d players, but got %d", numberOfPlayers, game.StartedWith)
 	}
 }
 
-func AssertGameFinishedWith(t testing.TB, game *SpyGame, want string) {
+func AssertGameFinishedWith(t testing.TB, game *SpyGame, winner string) {
 	t.Helper()
-	if game.FinishedWith != want {
-		t.Errorf("expected winner %s, but got %q", want, game.FinishedWith)
+	passed := retryUntil(timeout, func() bool {
+		return game.FinishedWith == winner
+	})
+	if !passed {
+		t.Errorf("expected finish called with %s, but got %q", winner, game.FinishedWith)
 	}
 }
 
@@ -75,5 +84,14 @@ func AssertGameNotStarted(t testing.TB, game *SpyGame) {
 	if game.CalledStart {
 		t.Error("game should not have started")
 	}
+}
 
+func retryUntil(d time.Duration, f func() bool) bool {
+	deadline := time.Now().Add(d)
+	for time.Now().Before(deadline) {
+		if f() {
+			return true
+		}
+	}
+	return false
 }
