@@ -23,7 +23,7 @@ type PlayerServer struct {
 	http.Handler
 }
 
-func NewServer(store PlayerStore) *PlayerServer {
+func NewServer(store PlayerStore) (*PlayerServer, error) {
 	s := new(PlayerServer)
 	s.store = store
 
@@ -35,7 +35,7 @@ func NewServer(store PlayerStore) *PlayerServer {
 
 	s.Handler = router
 
-	return s
+	return s, nil
 }
 
 const jsonContentType = "application/json"

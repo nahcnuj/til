@@ -16,6 +16,9 @@ func main() {
 	}
 	defer close()
 
-	server := app.NewServer(store)
+	server, err := app.NewServer(store)
+	if err != nil {
+		log.Fatal("could not start a server")
+	}
 	log.Fatal(http.ListenAndServe(":5000", server))
 }

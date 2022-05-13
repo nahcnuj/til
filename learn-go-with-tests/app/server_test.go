@@ -23,7 +23,10 @@ func TestGetPlayers(t *testing.T) {
 		nil,
 		nil,
 	}
-	server := NewServer(&store)
+	server, err := NewServer(&store)
+	if err != nil {
+		t.Fatal("could not start a server")
+	}
 
 	t.Run("return Pepper's score", func(t *testing.T) {
 		request := newGetScoreRequest("Pepper")
@@ -61,7 +64,10 @@ func TestScoreWins(t *testing.T) {
 		nil,
 		nil,
 	}
-	server := NewServer(store)
+	server, err := NewServer(store)
+	if err != nil {
+		t.Fatal("could not start a server")
+	}
 
 	t.Run("record wins when POST", func(t *testing.T) {
 		player := "Pepper"
@@ -85,7 +91,10 @@ func TestLeague(t *testing.T) {
 		}
 
 		store := StubPlayerStore{nil, nil, wantedLeague}
-		server := NewServer(&store)
+		server, err := NewServer(&store)
+		if err != nil {
+			t.Fatal("could not start a server")
+		}
 
 		request := newGetLeagueRequest()
 		response := httptest.NewRecorder()
@@ -101,7 +110,10 @@ func TestLeague(t *testing.T) {
 
 func TestGame(t *testing.T) {
 	t.Run("GET /game returns 200", func(t *testing.T) {
-		server := NewServer(&StubPlayerStore{})
+		server, err := NewServer(&StubPlayerStore{})
+		if err != nil {
+			t.Fatal("could not start a server")
+		}
 
 		request := newGetGameRequest()
 		response := httptest.NewRecorder()
@@ -114,7 +126,12 @@ func TestGame(t *testing.T) {
 	t.Run("receive a message over a websocket, which is a game winner", func(t *testing.T) {
 		winner := "Ruth"
 		store := &StubPlayerStore{}
-		server := httptest.NewServer(NewServer(store))
+
+		handler, err := NewServer(store)
+		if err != nil {
+			t.Fatal("could not start a server")
+		}
+		server := httptest.NewServer(handler)
 		defer server.Close()
 
 		wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws"
