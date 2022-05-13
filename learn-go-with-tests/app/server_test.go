@@ -132,15 +132,32 @@ func TestGame(t *testing.T) {
 		writeMessageToWebSocket(t, ws, "3")
 		writeMessageToWebSocket(t, ws, winner)
 
-		time.Sleep(10 * time.Millisecond)
+		tenMS := 10 * time.Millisecond
+		time.Sleep(tenMS)
 		AssertGameStartedWith(t, game, 3)
 		AssertGameFinishedWith(t, game, winner)
 
-		_, gotBlindAlert, _ := ws.ReadMessage()
-		if string(gotBlindAlert) != wantedBlindAlert {
-			t.Errorf("blind alert is wrong, got %q, want %q", string(gotBlindAlert), wantedBlindAlert)
-		}
+		within(t, tenMS, func() {
+			assertWebSocketGotMsg(t, ws, wantedBlindAlert)
+		})
 	})
+}
+
+func within(t testing.TB, timeout time.Duration, assert func()) {
+	t.Helper()
+
+	done := make(chan struct{}, 1)
+
+	go func() {
+		assert()
+		done <- struct{}{}
+	}()
+
+	select {
+	case <-time.After(timeout):
+		t.Error("timed out")
+	case <-done:
+	}
 }
 
 func newGetScoreRequest(name string) *http.Request {
@@ -215,5 +232,14 @@ func assertLeague(t testing.TB, got, want []Player) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("league table is wrong, got %v, want %v", got, want)
+	}
+}
+
+func assertWebSocketGotMsg(t testing.TB, ws *websocket.Conn, want string) {
+	t.Helper()
+
+	_, got, _ := ws.ReadMessage()
+	if string(got) != want {
+		t.Errorf("got %q, want %q", string(got), want)
 	}
 }
