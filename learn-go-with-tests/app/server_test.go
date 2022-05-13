@@ -121,10 +121,7 @@ func TestGame(t *testing.T) {
 		defer server.Close()
 
 		wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws"
-		ws, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
-		if err != nil {
-			t.Fatalf("could not open a websocket connection on %s: %v", wsURL, err)
-		}
+		ws := mustDialWebSocket(t, wsURL)
 		defer ws.Close()
 
 		if err := ws.WriteMessage(websocket.TextMessage, []byte(winner)); err != nil {
@@ -155,6 +152,15 @@ func mustMakePlayerServer(t testing.TB, store PlayerStore) *PlayerServer {
 		t.Fatal("could not start a server")
 	}
 	return server
+}
+
+func mustDialWebSocket(t testing.TB, url string) *websocket.Conn {
+	t.Helper()
+	ws, _, err := websocket.DefaultDialer.Dial(url, nil)
+	if err != nil {
+		t.Fatalf("could not open a websocket connection on %s: %v", url, err)
+	}
+	return ws
 }
 
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
