@@ -2,6 +2,7 @@ package app_test
 
 import (
 	"io"
+	"io/ioutil"
 	"testing"
 	"time"
 
@@ -29,7 +30,7 @@ func TestTexasHoldem_Start(t *testing.T) {
 		store := &app.StubPlayerStore{}
 		blindAlerter := &SpyBlindAlerter{}
 		game := app.NewTexasHoldem(store, blindAlerter)
-		game.Start(5)
+		game.Start(5, ioutil.Discard)
 
 		cases := []scheduledAlert{
 			{0 * time.Minute, 100},
@@ -50,7 +51,7 @@ func TestTexasHoldem_Start(t *testing.T) {
 	t.Run("schedule printing of blind values for 7 players", func(t *testing.T) {
 		blindAlerter := &SpyBlindAlerter{}
 		game := app.NewTexasHoldem(dummyPlayerStore, blindAlerter)
-		game.Start(7)
+		game.Start(7, ioutil.Discard)
 
 		cases := []scheduledAlert{
 			{0 * time.Minute, 100},

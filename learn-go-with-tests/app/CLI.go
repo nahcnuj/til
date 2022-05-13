@@ -31,7 +31,7 @@ func (cli *CLI) PlayPoker() {
 		return
 	}
 
-	cli.game.Start(numberOfPlayers)
+	cli.game.Start(numberOfPlayers, cli.out)
 
 	userInput := cli.readLine()
 	if !strings.HasSuffix(userInput, " wins") {

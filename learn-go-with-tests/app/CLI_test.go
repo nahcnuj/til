@@ -18,7 +18,7 @@ type SpyGame struct {
 	FinishedWith string
 }
 
-func (g *SpyGame) Start(numberOfPlayers int) {
+func (g *SpyGame) Start(numberOfPlayers int, alertDestination io.Writer) {
 	g.CalledStart = true
 	g.StartedWith = numberOfPlayers
 }

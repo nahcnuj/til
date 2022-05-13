@@ -1,12 +1,12 @@
 package app
 
 import (
-	"os"
+	"io"
 	"time"
 )
 
 type Game interface {
-	Start(numberOfPlayers int)
+	Start(numberOfPlayers int, alertsDestination io.Writer)
 	Finish(winner string)
 }
 
@@ -19,13 +19,13 @@ func NewTexasHoldem(store PlayerStore, alerter BlindAlerter) *TexasHoldem {
 	return &TexasHoldem{store, alerter}
 }
 
-func (g *TexasHoldem) Start(numberOfPlayers int) {
+func (g *TexasHoldem) Start(numberOfPlayers int, alertsDestination io.Writer) {
 	blindIncrementTime := time.Duration(5+numberOfPlayers) * time.Minute
 
 	blinds := []int{100, 200, 400, 600, 1000, 2000, 4000, 8000, 16000, 32000, 64000}
 	blindTime := 0 * time.Minute
 	for _, amount := range blinds {
-		g.alerter.ScheduleAlertAt(blindTime, amount, os.Stdout)
+		g.alerter.ScheduleAlertAt(blindTime, amount, alertsDestination)
 		blindTime += blindIncrementTime
 	}
 }
