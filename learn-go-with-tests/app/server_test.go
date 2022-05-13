@@ -124,9 +124,7 @@ func TestGame(t *testing.T) {
 		ws := mustDialWebSocket(t, wsURL)
 		defer ws.Close()
 
-		if err := ws.WriteMessage(websocket.TextMessage, []byte(winner)); err != nil {
-			t.Fatalf("could not send message over the websocket: %v", err)
-		}
+		writeMessageToWebSocket(t, ws, winner)
 
 		time.Sleep(10 * time.Millisecond)
 		AssertPlayerWin(t, store, winner)
@@ -161,6 +159,14 @@ func mustDialWebSocket(t testing.TB, url string) *websocket.Conn {
 		t.Fatalf("could not open a websocket connection on %s: %v", url, err)
 	}
 	return ws
+}
+
+func writeMessageToWebSocket(t testing.TB, conn *websocket.Conn, message string) {
+	t.Helper()
+	if err := conn.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
+		t.Fatalf("could not send message over the websocket: %v", err)
+	}
+
 }
 
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
