@@ -35,15 +35,20 @@ func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 }
 
 type SpyGame struct {
-	CalledStart  bool
+	CalledStart bool
+	StartedWith int
+
+	BlindAlert []byte
+
 	CalledFinish bool
-	StartedWith  int
 	FinishedWith string
 }
 
 func (g *SpyGame) Start(numberOfPlayers int, alertDestination io.Writer) {
 	g.CalledStart = true
 	g.StartedWith = numberOfPlayers
+
+	alertDestination.Write(g.BlindAlert)
 }
 
 func (g *SpyGame) Finish(winner string) {
