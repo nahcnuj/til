@@ -79,12 +79,13 @@ func (s *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
+var wsUpgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
+
 func (s *PlayerServer) wsHandler(w http.ResponseWriter, r *http.Request) {
-	upgrader := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	conn, _ := upgrader.Upgrade(w, r, nil)
+	conn, _ := wsUpgrader.Upgrade(w, r, nil)
 	_, winnerMsg, _ := conn.ReadMessage()
 	s.store.RecordWin(string(winnerMsg))
 }
