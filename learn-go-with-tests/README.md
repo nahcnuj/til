@@ -29,3 +29,4 @@ The code I wrote along with [Learn Go with Tests](https://quii.gitbook.io/learn-
     3. IO and sorting (done)
     4. Command line & package structure (done)
     5. Time (done)
+    6. Websockets (wip)
