@@ -11,66 +11,49 @@ import (
 
 var dummyStdOut = &bytes.Buffer{}
 
-type SpyGame struct {
-	CalledStart  bool
-	CalledFinish bool
-	StartedWith  int
-	FinishedWith string
-}
-
-func (g *SpyGame) Start(numberOfPlayers int, alertDestination io.Writer) {
-	g.CalledStart = true
-	g.StartedWith = numberOfPlayers
-}
-
-func (g *SpyGame) Finish(winner string) {
-	g.CalledFinish = true
-	g.FinishedWith = winner
-}
-
 func TestCLI(t *testing.T) {
 	t.Run("start a game with 3 players and finish it with Chris as the winner", func(t *testing.T) {
 		in := userSends("3", "Chris wins")
 		stdout := &bytes.Buffer{}
-		game := &SpyGame{}
+		game := &app.SpyGame{}
 
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
-		assertGameStartedWith(t, game, 3)
-		assertGameFinishedWith(t, game, "Chris")
+		app.AssertGameStartedWith(t, game, 3)
+		app.AssertGameFinishedWith(t, game, "Chris")
 	})
 
 	t.Run("start a game with 8 players and record Cleo as the winner", func(t *testing.T) {
 		in := userSends("8", "Cleo wins")
 		stdout := &bytes.Buffer{}
-		game := &SpyGame{}
+		game := &app.SpyGame{}
 
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt)
-		assertGameStartedWith(t, game, 8)
-		assertGameFinishedWith(t, game, "Cleo")
+		app.AssertGameStartedWith(t, game, 8)
+		app.AssertGameFinishedWith(t, game, "Cleo")
 	})
 
 	t.Run("print an error if a non numeric value is entered", func(t *testing.T) {
 		in := userSends("Pies")
 		stdout := &bytes.Buffer{}
-		game := &SpyGame{}
+		game := &app.SpyGame{}
 
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
 
-		assertGameNotStarted(t, game)
+		app.AssertGameNotStarted(t, game)
 		assertMessagesSentToUser(t, stdout, app.PlayerPrompt, app.BadPlayerInputError)
 	})
 
 	t.Run("print an error if winner could not be parsed", func(t *testing.T) {
 		in := userSends("5", "Lloyd is a killer")
 		stdout := &bytes.Buffer{}
-		game := &SpyGame{}
+		game := &app.SpyGame{}
 
 		cli := app.NewCLI(in, stdout, game)
 		cli.PlayPoker()
@@ -90,20 +73,6 @@ func userSends(inputs ...string) io.Reader {
 	return strings.NewReader(s)
 }
 
-func assertGameStartedWith(t testing.TB, game *SpyGame, want int) {
-	t.Helper()
-	if game.StartedWith != want {
-		t.Errorf("expected %d players, but got %d", want, game.StartedWith)
-	}
-}
-
-func assertGameFinishedWith(t testing.TB, game *SpyGame, want string) {
-	t.Helper()
-	if game.FinishedWith != want {
-		t.Errorf("expected winner %s, but got %q", want, game.FinishedWith)
-	}
-}
-
 func assertMessagesSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...string) {
 	t.Helper()
 
@@ -112,12 +81,4 @@ func assertMessagesSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...st
 	if got != want {
 		t.Errorf("got %q sent to user, but want %+v", got, messages)
 	}
-}
-
-func assertGameNotStarted(t testing.TB, game *SpyGame) {
-	t.Helper()
-	if game.CalledStart {
-		t.Error("game should not have started")
-	}
-
 }

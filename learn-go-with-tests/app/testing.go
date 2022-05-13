@@ -1,6 +1,9 @@
 package app
 
-import "testing"
+import (
+	"io"
+	"testing"
+)
 
 type StubPlayerStore struct {
 	scores   map[string]int
@@ -29,4 +32,43 @@ func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 	if store.winCalls[0] != winner {
 		t.Errorf("did not store correct winner, got %q, want %q", store.winCalls[0], winner)
 	}
+}
+
+type SpyGame struct {
+	CalledStart  bool
+	CalledFinish bool
+	StartedWith  int
+	FinishedWith string
+}
+
+func (g *SpyGame) Start(numberOfPlayers int, alertDestination io.Writer) {
+	g.CalledStart = true
+	g.StartedWith = numberOfPlayers
+}
+
+func (g *SpyGame) Finish(winner string) {
+	g.CalledFinish = true
+	g.FinishedWith = winner
+}
+
+func AssertGameStartedWith(t testing.TB, game *SpyGame, want int) {
+	t.Helper()
+	if game.StartedWith != want {
+		t.Errorf("expected %d players, but got %d", want, game.StartedWith)
+	}
+}
+
+func AssertGameFinishedWith(t testing.TB, game *SpyGame, want string) {
+	t.Helper()
+	if game.FinishedWith != want {
+		t.Errorf("expected winner %s, but got %q", want, game.FinishedWith)
+	}
+}
+
+func AssertGameNotStarted(t testing.TB, game *SpyGame) {
+	t.Helper()
+	if game.CalledStart {
+		t.Error("game should not have started")
+	}
+
 }
