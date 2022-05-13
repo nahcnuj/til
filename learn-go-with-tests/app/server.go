@@ -16,6 +16,8 @@ type PlayerStore interface {
 	GetLeague() League
 }
 
+const htmlTemplatePath = "game.html"
+
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
@@ -70,7 +72,7 @@ func (s *PlayerServer) recordWin(w http.ResponseWriter, player string) {
 }
 
 func (s *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("game.html")
+	tmpl, err := template.ParseFiles(htmlTemplatePath)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("problem loading template: %s", err.Error()), http.StatusInternalServerError)
 		return
