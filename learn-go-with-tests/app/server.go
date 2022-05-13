@@ -21,11 +21,18 @@ const htmlTemplatePath = "game.html"
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
+	template *template.Template
 }
 
 func NewServer(store PlayerStore) (*PlayerServer, error) {
 	s := new(PlayerServer)
 	s.store = store
+
+	tmpl, err := template.ParseFiles(htmlTemplatePath)
+	if err != nil {
+		return nil, fmt.Errorf("problem loading template: %s", err.Error())
+	}
+	s.template = tmpl
 
 	router := http.NewServeMux()
 	router.Handle("/league", http.HandlerFunc(s.leagueHandler))
@@ -72,13 +79,7 @@ func (s *PlayerServer) recordWin(w http.ResponseWriter, player string) {
 }
 
 func (s *PlayerServer) gameHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(htmlTemplatePath)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("problem loading template: %s", err.Error()), http.StatusInternalServerError)
-		return
-	}
-
-	tmpl.Execute(w, nil)
+	s.template.Execute(w, nil)
 }
 
 var wsUpgrader = websocket.Upgrader{
