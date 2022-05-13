@@ -114,20 +114,23 @@ func TestGame(t *testing.T) {
 		assertStatus(t, response, http.StatusOK)
 	})
 
-	t.Run("receive a message over a websocket, which is a game winner", func(t *testing.T) {
+	t.Run("start a game with 3 players and declare Ruth as the winner", func(t *testing.T) {
+		game := &SpyGame{}
 		winner := "Ruth"
 		store := &StubPlayerStore{}
-		server := httptest.NewServer(mustMakePlayerServer(t, store))
+		server := httptest.NewServer(mustMakePlayerServer(t, store, game))
 		defer server.Close()
 
 		wsURL := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws"
 		ws := mustDialWebSocket(t, wsURL)
 		defer ws.Close()
 
+		writeMessageToWebSocket(t, ws, "3")
 		writeMessageToWebSocket(t, ws, winner)
 
 		time.Sleep(10 * time.Millisecond)
-		AssertPlayerWin(t, store, winner)
+		AssertGameStartedWith(t, game, 3)
+		AssertGameFinishedWith(t, game, winner)
 	})
 }
 
