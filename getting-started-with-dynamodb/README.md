@@ -65,6 +65,75 @@ DynamoDB では、 1 つのテーブルにつき 20 個（デフォルトクォ�
 
 各ストリームレコードは 24 時間後にストリームから自動的に削除される。
 
+## Prerequisites
+
+[Prerequisites \- Getting Started Tutorial \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.SettingUp.DynamoWebService.html)
+
+DynamoDB を使う事前準備
+
+### ローカル環境：DynamoDB Local
+
+[Deploying DynamoDB Locally on Your Computer \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html#docker)
+
+Jar ファイル、Docker イメージ、Maven のいずれかで利用できる。
+
+ここでは Docker イメージを使ってみる
+[amazon/dynamodb\-local \- Docker Image \| Docker Hub](https://hub.docker.com/r/amazon/dynamodb-local)
+
+#### Docker image
+
+```console
+$ docker -v
+Docker version 20.10.16, build aa7e414
+$ docker compose version
+Docker Compose version v2.6.0
+$ aws --version
+aws-cli/2.7.5 Python/3.9.11 Linux/5.10.102.1-microsoft-standard-WSL2 exe/x86_64.ubuntu.22 prompt/off
+$
+```
+
+docker-compose.yml を作成して `docker compose up` で起動
+
+```console
+$ mkdir data
+$ docker compose up
+```
+
+適当なダミー認証情報を設定し、エンドポイントの URL に `http://localhost:8000/` を指定して、適当な API を叩いてみる：
+
+```console
+$ aws configure
+AWS Access Key ID [None]: DUMMY
+AWS Secret Access Key [None]: DUMMY
+Default region name [ap-northeast-1]: 
+Default output format [None]: 
+$ aws dynamodb list-tables --endpoint-url=http://localhost:8000/
+{
+    "TableNames": []
+}
+$
+```
+
+DB ファイルが SQLite だった
+
+```console
+$ file data/shared-local-instance.db 
+data/shared-local-instance.db: SQLite 3.x database, last written using SQLite version 3008007, page size 1024, file counter 1, database pages 13, cookie 0x8, schema 4, UTF-8, version-valid-for 1
+$
+```
+
+### ウェブサービス：DynamoDB
+
+[Setting Up DynamoDB \(Web Service\) \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html)
+
+(TODO)
+
+以降は DynamoDB Local で行う。
+
+## Step 1: Create a Table
+
+(TODO)
+
 ## References
 
 - [Getting Started with DynamoDB \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
