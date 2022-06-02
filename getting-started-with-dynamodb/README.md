@@ -132,7 +132,130 @@ $
 
 ## Step 1: Create a Table
 
-(TODO)
+```sh
+aws dynamodb create-table \
+  --table-name Music \
+  --attribute-definitions \
+    AttributeName=Artist,AttributeType=S \
+    AttributeName=SongTitle,AttributeType=S \
+  --key-schema \
+    AttributeName=Artist,KeyType=HASH \
+    AttributeName=SongTitle,KeyType=RANGE \
+  --provisioned-throughput \
+    ReadCapacityUnits=1,WriteCapacityUnits=1 \
+  --table-class STANDARD \
+  --endpoint="http://localhost:8000"
+```
+
+結果：
+
+```json
+{
+    "TableDescription": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "Artist",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "SongTitle",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "Music",
+        "KeySchema": [
+            {
+                "AttributeName": "Artist",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "SongTitle",
+                "KeyType": "RANGE"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2022-06-03T02:41:23.983000+09:00",
+        "ProvisionedThroughput": {
+            "LastIncreaseDateTime": "1970-01-01T09:00:00+09:00",
+            "LastDecreaseDateTime": "1970-01-01T09:00:00+09:00",
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+        },
+        "TableSizeBytes": 0,
+        "ItemCount": 0,
+        "TableArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Music"
+    }
+}
+```
+
+ローカルで実行したので既に TableStatus が ACTIVE になっているが、
+おそらく AWS でやると CREATING になるのだろう。 (TODO)
+
+```console
+$ aws dynamodb list-tables --endpoint-url=http://localhost:8000/
+{
+    "TableNames": [
+        "Music"
+    ]
+}
+$ aws dynamodb describe-table --table-name Music --endpoint-url=http://localhost:8000/
+# 省略：先の create-table と同じ結果
+```
+
+### テーブルの作り方
+
+[Basic Operations on DynamoDB Tables \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.CreateTable) の "Creating a Table"
+
+必須設定：
+
+- テーブル名: `--table-name`
+  - 命名規則
+    - 参照：[DynamoDB の命名規則](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.NamingRules)
+      - `/^[a-zA-Z0-9_.-]{3,255}$/`
+      - case-sensitive
+      - UTF-8
+  - AWS アカウントとリージョンで一意でなければならない
+    - 同じテーブル名でも、リージョンが違えば全く別のテーブルになる
+- プライマリキー: `--attribute-definitions`, `--key-schema`
+  - 属性名: `AttributeName`
+    - 命名規則
+        - 参照：[DynamoDB の命名規則](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.NamingRules)
+        - `/^[a-zA-Z0-9_.-]+$/` かつ 64 KB を超えない
+        - 次の属性は 255 文字を超えない
+          - セカンダリインデックス（パーティションキー・ソートキー）
+          - ユーザー指定の射影属性 (projected attributes)
+        - case-sensitive
+        - UTF-8
+  - データ型: `AttributeType` （`--attribute-definitions` で指定）
+    - 参照：[AWS::DynamoDB::Table AttributeDefinition \- AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-attributedef.html)
+      - 文字列型: `S`
+      - 数値型: `N`
+      - バイナリ型: `B`
+  - 属性の役割: `KeyType` （`--key-schema` で指定）
+    - パーティションキー: `HASH`
+    - ソートキー: `RANGE`
+- スループット: `--provisioned-throughput` （プロビジョンドキャパシティモードの場合）
+  - 読み取り容量ユニット: `ReadCapacityUnits`
+  - 書き込み容量ユニット: `WriteCapacityUnits`
+
+読み取り/書き込み容量ユニットについては料金ページを参照：
+[プロビジョニング済みキャパシティーの料金 \- Amazon DynamoDB \| AWS](https://aws.amazon.com/jp/dynamodb/pricing/provisioned/)
+
+DynamoDB Local では、スループットの設定は必要だが実際には使われないので注意。
+参照：[DynamoDB Local の使用に関する注意事項 \- Amazon DynamoDB](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/DynamoDBLocal.UsageNotes.html#DynamoDBLocal.Differences)
+
+また、 `--table-class` はテーブルクラスで料金に影響する。
+テーブルクラスには次の 2 種類がある：
+
+- Standard: `STANDARD`
+  - 標準の料金体系
+- Standard-Infrequent Access (Standard-IA): `STANDARD_INFREQUENT_ACCESS`
+  - アクセスが頻繁でないデータ向けに、ストレージコストが安い（読み書きコストが高い）料金体系
+
+詳細は料金ページを参照：
+- [プロビジョニング済みキャパシティーの料金 \- Amazon DynamoDB \| AWS](https://aws.amazon.com/jp/dynamodb/pricing/provisioned/)
+- [オンデマンドキャパシティーの料金 \- Amazon DynamoDB \| AWS](https://aws.amazon.com/jp/dynamodb/pricing/on-demand/)
 
 ## References
 
