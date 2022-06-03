@@ -295,6 +295,22 @@ $ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
 - バイナリ型（`B`）：データを Base64 でエンコードした文字列
 - NULL 型（`NULL`）： `true`
 
+なお、put-item は、指定されたプライマリキーを持つ項目が既に存在した場合、デフォルトでは新たに指定した項目で**既存の項目を置き換える**。
+これを防ぐ（そのような場合にエラーにする）ためには、 `--condition-expression` オプションで `attribute_not_exists` 関数を使って条件付き挿入にする必要がある。
+
+```console
+$ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --item '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "Imakoko"}}' \
+  --condition-expression 'attribute_not_exists(Artist) AND attribute_not_exists(SongTitle)'
+
+An error occurred (ConditionalCheckFailedException) when calling the PutItem operation: The conditional request failed
+$ echo $?
+254
+```
+
+参考：[Condition Expressions \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html#Expressions.ConditionExpressions.PreventingOverwrites)
+
 ## Step 3: Read Data from a Table
 
 Step 2 で挿入したデータを読み出してみる。
