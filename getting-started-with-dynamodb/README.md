@@ -295,6 +295,34 @@ $ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
 - バイナリ型（`B`）：データを Base64 でエンコードした文字列
 - NULL 型（`NULL`）： `true`
 
+## Step 3: Read Data from a Table
+
+Step 2 で挿入したデータを読み出してみる。
+ここではプライマリキーを指定して単一の項目を取得する。
+
+```console
+$ aws dynamodb get-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --key \
+    '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  | jq -c
+{"Item":{"Artist":{"S":"Nao Toyama"},"Year":{"N":"2017"},"SongTitle":{"S":"True Destiny"}}}
+$ aws dynamodb get-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --key \
+    '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "Imakoko"}}' \
+  | jq -c
+{"Item":{"Artist":{"S":"Nao Toyama"},"Year":{"N":"2018"},"B-side":{"BOOL":false},"SongTitle":{"S":"Imakoko"},"InAlbums":{"SS":["Rainbow"]}}}
+$ aws dynamodb get-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --key \
+    '{"Artist": {"S": "ぽかぽかイオン"}, "SongTitle": {"S": "やじるし→"}}' \
+  | jq -c
+{"Item":{"Artist":{"S":"ぽかぽかイオン"},"Year":{"N":"2022"},"B-side":{"BOOL":false},"SongTitle":{"S":"やじるし→"},"Singers":{"L":[{"S":"Nao Toyama"},{"S":"Kiyono Yasuno"}]}}}
+```
+
+※各出力は [jq](https://stedolan.github.io/jq/) を使って縮めていることに注意。
+
 ## References
 
 - [Getting Started with DynamoDB \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
