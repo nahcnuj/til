@@ -373,7 +373,7 @@ An error occurred (ValidationException) when calling the UpdateItem operation: I
 ```
 
 また、属性名が `.` `-` を含んだり、予約語であったりする場合は直接書けないため、 `#` で始まる変数名として `--expression-attribute-names` でマッピングする。
-`-` を含む属性名を直接書いた場合は、次のようなエラーが発生する。
+そのような属性名を直接書いた場合は、次のようなエラーが発生する。
 
 ```console
 $ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
@@ -384,11 +384,6 @@ $ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
   --return-values UPDATED_NEW
 
 An error occurred (ValidationException) when calling the UpdateItem operation: Invalid UpdateExpression: Syntax error; token: "-", near: "Invalid-Name"
-```
-
-属性名に `.` を含む場合は、直接書くとネストされた属性のパスになってしまい、次のようなエラーになる。
-
-```console
 $ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
   --table-name Music \
   --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
@@ -397,6 +392,14 @@ $ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
   --return-values UPDATED_NEW
 
 An error occurred (ValidationException) when calling the UpdateItem operation: The document path provided in the update expression is invalid for update
+$ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
+  --table-name Music \
+  --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  --update-expression 'SET Count = :newval' \
+  --expression-attribute-values '{":newval": {"N": "1"}}' \
+  --return-values UPDATED_NEW
+
+An error occurred (ValidationException) when calling the UpdateItem operation: Invalid UpdateExpression: Attribute name is a reserved keyword; reserved keyword: Count
 ```
 
 詳細：[Update Expressions \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.UpdateExpressions.html)
