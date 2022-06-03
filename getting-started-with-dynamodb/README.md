@@ -339,6 +339,68 @@ $ aws dynamodb get-item --endpoint-url http://localhost:8000/ \
 
 ※各出力を [jq](https://stedolan.github.io/jq/) を使って縮めていることに注意。
 
+## Step 4: Update Data in a Table
+
+Step 2 で挿入したデータを更新してみる。
+
+```console
+$ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
+  --table-name Music \
+  --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  --update-expression 'SET #SideB = :newval' \
+  --expression-attribute-values '{":newval": {"BOOL": false}}' \
+  --expression-attribute-names '{"#SideB": "B-side"}' \
+  --return-values ALL_NEW \
+  | jq -c
+{"Attributes":{"Artist":{"S":"Nao Toyama"},"Year":{"N":"2017"},"B-side":{"BOOL":false},"SongTitle":{"S":"True Destiny"}}}
+```
+
+※出力を [jq](https://stedolan.github.io/jq/) を使って縮めていることに注意。
+
+`--update-expression` に項目を更新するための式を指定する。
+
+ただし、設定する値は `:newval` のように `:` で始まる変数名として、`--expression-attribute-values` でマッピングする。
+直接値を指定しようとすると次のように文法エラーとなる。
+
+```console
+$ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
+  --table-name Music \
+  --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  --update-expression 'SET NewAttr = {"NULL": true}' \
+  --return-values ALL_NEW
+
+An error occurred (ValidationException) when calling the UpdateItem operation: Invalid UpdateExpression: Syntax error; token: "{", near: "= {""
+```
+
+また、属性名が `.` `-` を含んだり、予約語であったりする場合は直接書けないため、 `#` で始まる変数名として `--expression-attribute-names` でマッピングする。
+`-` を含む属性名を直接書いた場合は、次のようなエラーが発生する。
+
+```console
+$ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
+  --table-name Music \
+  --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  --update-expression 'SET Invalid-Name = :newval' \
+  --expression-attribute-values '{":newval": {"NULL": true}}' \
+  --return-values UPDATED_NEW
+
+An error occurred (ValidationException) when calling the UpdateItem operation: Invalid UpdateExpression: Syntax error; token: "-", near: "Invalid-Name"
+```
+
+属性名に `.` を含む場合は、直接書くとネストされた属性のパスになってしまい、次のようなエラーになる。
+
+```console
+$ aws dynamodb update-item --endpoint-url "http://localhost:8000" \
+  --table-name Music \
+  --key '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}}' \
+  --update-expression 'SET Invalid.AttrName = :newval' \
+  --expression-attribute-values '{":newval": {"NULL": true}}' \
+  --return-values UPDATED_NEW
+
+An error occurred (ValidationException) when calling the UpdateItem operation: The document path provided in the update expression is invalid for update
+```
+
+詳細：[Update Expressions \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.UpdateExpressions.html)
+
 ## References
 
 - [Getting Started with DynamoDB \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
