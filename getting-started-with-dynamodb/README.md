@@ -337,7 +337,7 @@ $ aws dynamodb get-item --endpoint-url http://localhost:8000/ \
 {"Item":{"Artist":{"S":"ぽかぽかイオン"},"Year":{"N":"2022"},"B-side":{"BOOL":false},"SongTitle":{"S":"やじるし→"},"Singers":{"L":[{"S":"Nao Toyama"},{"S":"Kiyono Yasuno"}]}}}
 ```
 
-※各出力は [jq](https://stedolan.github.io/jq/) を使って縮めていることに注意。
+※各出力を [jq](https://stedolan.github.io/jq/) を使って縮めていることに注意。
 
 ## References
 
