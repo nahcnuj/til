@@ -251,6 +251,50 @@ DynamoDB Local では、スループットの設定は必要だが実際には�
 - [プロビジョニング済みキャパシティーの料金 \- Amazon DynamoDB \| AWS](https://aws.amazon.com/jp/dynamodb/pricing/provisioned/)
 - [オンデマンドキャパシティーの料金 \- Amazon DynamoDB \| AWS](https://aws.amazon.com/jp/dynamodb/pricing/on-demand/)
 
+## Step 2: Write Data to a Table Using the Console or AWS CLI
+
+Step 1 で作成した Music テーブルに項目を挿入してみる。
+
+```console
+$ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --item \
+    '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "True Destiny"}, "Year": {"N": "2017"}}'
+$ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --item \
+    '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "Chain the world"}, "Year": {"N": "2017"}, "B-side": {"BOOL": true}}'
+$ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --item \
+    '{"Artist": {"S": "Nao Toyama"}, "SongTitle": {"S": "Imakoko"}, "Year": {"N": "2018"}, "B-side": {"BOOL": false}, "InAlbums": {"SS": ["Rainbow"]}}'
+$ aws dynamodb put-item --endpoint-url http://localhost:8000/ \
+  --table-name Music \
+  --item \
+    '{"Artist": {"S": "ぽかぽかイオン"}, "SongTitle": {"S": "やじるし→"}, "Year": {"N": "2022"}, "B-side": {"BOOL": false}, "Singers": {"L": [{"S": "Nao Toyama"}, {"S": "Kiyono Yasuno"}]}}'
+```
+
+### データの挿入
+
+詳細は：[PutItem \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html)
+
+挿入するデータは以下のような形で指定する。
+詳細は：[AttributeValue \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html)
+
+```json
+{
+  "属性名": {
+    "型": 値
+  },
+  ...
+}
+```
+
+特に、次の型の値の書き方が特徴的。
+- 数値型（`N`）：文字列 `"3.14"`
+- バイナリ型（`B`）：データを Base64 でエンコードした文字列
+- NULL 型（`NULL`）： `true`
+
 ## References
 
 - [Getting Started with DynamoDB \- Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
